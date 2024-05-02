@@ -1,5 +1,6 @@
 from typing import Callable
 from nTypes import *
+from functools import lru_cache
 
 def removNestings(l):
     output = []
@@ -85,6 +86,7 @@ registers: dict[str, int] = {
 
 import sys
 
+@lru_cache(maxsize=128)
 def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
     values: list[str] = line.strip().split(' ')
     info: list[int, str] = instructions[values[0]]
