@@ -1,0 +1,1 @@
+python3 assembler.py [file-in] [file-out] [optional: -v (for verbose mode)]
