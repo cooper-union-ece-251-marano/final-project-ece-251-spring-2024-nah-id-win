@@ -73,14 +73,14 @@ blanks: dict[str, int] = {
 }
 
 registers: dict[str, int] = {
-    '$im' : 0,
-    '$a' : 1,
-    '$x' : 2,
-    '$y' : 3,
-    '$hi' : 4,
-    '$lo' : 5,
-    '$sp' : 6,
-    '$ra' : 7,
+    '$pc' : 0,
+    '$sp' : 1,
+    '$ra' : 2,
+    '$im' : 3,
+    '$a' : 4,
+    '$x' : 5,
+    '$hi' : 6,
+    '$lo' : 7,
 }
 
 import sys
