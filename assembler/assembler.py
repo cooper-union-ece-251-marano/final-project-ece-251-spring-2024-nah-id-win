@@ -12,7 +12,7 @@ def removNestings(l):
 
 instructions: dict[str, list[int, str, int]] = {
     'ADDI' : [-1, 'N'],
-    'NOOP' : [0, 'I'],
+    'NOOP' : [0, 'J'],
     'INC' : [1, 'R'],
     'DEC' : [2, 'R'],
     'RST' : [3, 'R'],
@@ -107,7 +107,7 @@ def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
             op += bin(int(halfImm))[2:].rjust(8, '0')
     elif info[1] == 'J':
         if (values[0] not in ['NOOP', 'HALT']):
-            op += bin(registers[values[1]])[2:].rjust(3, '0')
+            op += bin(registers[values[1].rstrip(',')])[2:].rjust(3, '0')
     else:
         if values[0] in ['JAL', 'J']:
             ops = (nTypeFunctions[values[0]](line, labels, insCount))
