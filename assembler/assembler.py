@@ -1,6 +1,5 @@
 from typing import Callable
 from nTypes import *
-from functools import lru_cache
 
 def removNestings(l):
     output = []
@@ -17,7 +16,7 @@ instructions: dict[str, list[int, str, int]] = {
     'INC' : [1, 'R'],
     'DEC' : [2, 'R'],
     'RST' : [3, 'R'],
-    'JI' : [-1, 'N'],
+    'J' : [-1, 'N'],
     'JR' : [4, 'J'],
     'BNE' : [5, 'J'],
     'BE' : [6, 'J'],
@@ -54,7 +53,7 @@ instructions: dict[str, list[int, str, int]] = {
 
 nTypeFunctions: dict[str, Callable] = {
     'ADDI' : ADDI,
-    'JI' : JI,
+    'J' : J,
     'LW' : LW,
     'SW' : SW,
     'XORI' : XORI,
@@ -86,7 +85,6 @@ registers: dict[str, int] = {
 
 import sys
 
-@lru_cache(maxsize=128)
 def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
     values: list[str] = line.strip().split(' ')
     info: list[int, str] = instructions[values[0]]
@@ -111,7 +109,7 @@ def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
         if (values[0] not in ['NOOP', 'HALT']):
             op += bin(registers[values[1]])[2:].rjust(3, '0')
     else:
-        if values[0] == 'JAL':
+        if values[0] in ['JAL', 'J']:
             ops = (nTypeFunctions[values[0]](line, labels, insCount))
         else:
             ops = (nTypeFunctions[values[0]](line))

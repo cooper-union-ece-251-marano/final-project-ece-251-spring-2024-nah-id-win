@@ -64,10 +64,12 @@ def SLRI(line: str) -> list[str]:
     imm: str = immToBin(values[2].rstrip(','))
     return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'SLR {dest}, {src}, $im']
 
-@lru_cache(maxsize=128)
-def JI(line: str) -> list[str]:
+def J(line: str, labels: dict[str, int], insCount: int) -> list[str]:
     values: list[str] = line.split()[1:]
-    imm: str = immToBin(values[0].rstrip(','))
+    ji: str = values[0].rstrip(',')
+    if ji[0] == '.':
+        ji = str(labels[ji])
+    imm = immToBin(ji)
     return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'JR $im']
 
 @lru_cache(maxsize=128)
@@ -86,7 +88,6 @@ def SW(line: str) -> list[str]:
     imm: str = immToBin(values[2].rstrip(','))
     return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'SWOFF {src}, $im, {dest}']
 
-@lru_cache(maxsize=128)
 def JAL(line: str, labels: dict[str, int], insCount: int) -> list[str]:
     values: list[str] = line.split()[1:]
     ji: str = values[0].rstrip(',')
