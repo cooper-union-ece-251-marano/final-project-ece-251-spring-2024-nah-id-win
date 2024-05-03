@@ -8,7 +8,7 @@ BLE $a, $x, 100
 BGE $a, $x, 100
 HALT 0x10
 LIHI 0b20
-LILO 0b20
+LILO -100
 INC $a
 DEC $a
 RST $hi
@@ -29,7 +29,7 @@ ADDI $lo, $hi, 4000
 J 100
 LW $hi, $lo, 4000
 SW $hi, $lo, 4000
-XORI $lo, $hi, 4000
+XORI $lo, $hi, -4000
 ANDI $lo, $hi, 4000
 ORI $lo, $hi, 4000
 SETI $lo, 4000

@@ -1,4 +1,5 @@
 from functools import lru_cache
+from bitstring import *
 
 @lru_cache(maxsize=128)
 def immToBin(imm: str) -> str:
@@ -7,7 +8,7 @@ def immToBin(imm: str) -> str:
             return imm[2:].rjust(16, '0')
         elif imm[0:2] == '0x':
             return bin(int(imm[2:], 16))[2:].rjust(16, '0')
-    return bin(int(imm))[2:].rjust(16, '0')
+    return Bits(int=int(imm), length=16).bin
 
 @lru_cache(maxsize=128)
 def ADDI(line: str) -> list[str]:
@@ -16,6 +17,18 @@ def ADDI(line: str) -> list[str]:
     src: str = values[1].rstrip(',')
     imm: str = immToBin(values[2].rstrip(','))
     return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'ADD {dest}, {src}, $im']
+
+@lru_cache(maxsize=128)
+def INC(line: str) -> list[str]:
+    values: list[str] = line.split()[1:]
+    src: str = values[0].rstrip(',')
+    return [f'ADDI {src}, {src}, 1']
+
+@lru_cache(maxsize=128)
+def DEC(line: str) -> list[str]:
+    values: list[str] = line.split()[1:]
+    src: str = values[0].rstrip(',')
+    return [f'ADDI {src}, {src}, 0b1111111111111111']
 
 @lru_cache(maxsize=128)
 def XORI(line: str) -> list[str]:

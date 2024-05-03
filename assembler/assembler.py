@@ -1,5 +1,6 @@
 from typing import Callable
 from nTypes import *
+from bitstring import *
 
 def removNestings(l):
     output = []
@@ -13,8 +14,8 @@ def removNestings(l):
 instructions: dict[str, list[int, str, int]] = {
     'ADDI' : [-1, 'N'],
     'NOOP' : [0, 'J'],
-    'INC' : [16, 'R'],
-    'DEC' : [17, 'R'],
+    'INC' : [-1, 'N'],
+    'DEC' : [-1, 'N'],
     'RST' : [18, 'R'],
     'J' : [-1, 'N'],
     'JR' : [1, 'J'],
@@ -62,7 +63,9 @@ nTypeFunctions: dict[str, Callable] = {
     'SETI' : SETI,
     'SLLI' : SLLI,
     'SLRI' : SLRI,
-    'JAL' : JAL
+    'JAL' : JAL,
+    'INC' : INC,
+    'DEC' : DEC
 }
 
 blanks: dict[str, int] = {
@@ -102,9 +105,9 @@ def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
                 num = bin(int(halfImm[2:], 16))[2:].rjust(8, '0')
                 op += num
             else:
-                op += bin(int(halfImm))[2:].rjust(8, '0')
+                op += Bits(int=int(halfImm), length=8).bin
         else:
-            op += bin(int(halfImm))[2:].rjust(8, '0')
+            op += Bits(int=int(halfImm), length=8).bin
     elif info[1] == 'J':
         if (values[0] not in 'NOOP'):
             op += bin(registers[values[1].rstrip(',')])[2:].rjust(3, '0')
