@@ -29,7 +29,7 @@ module datapath
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic        clk, reset,
-    input  logic        memtoreg, pcsrc,
+    input  logic        memtoreg,
     input  logic        alusrc, regdst,
     input  logic        regwrite, jump,
     input  logic [3:0]  alucontrol,
@@ -52,12 +52,11 @@ module datapath
     logic [n-1:0] overflow;
     logic carry_out;
     logic overflow_flag;
+    logic pcsrc;
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
     adder       pcadd1(pc, 16'b1, 1'b0, 1'b1, carry_out, pcplus1);
-    // sl2         immsh(signimm, signimmsh);
-    // adder       pcadd2(pcplus1, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus1, pcbranch, pcsrc, pcnextbr);
     mux2 #(n)   pcmux(pcnextbr, rf.rf[jr], jump, pcnext);
 
@@ -67,10 +66,11 @@ module datapath
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
     signext #(n, 8)     se(instr[7:0], signimm);
     
-    always @(overflow_flag or overflow) begin
+    always @(overflow_flag or overflow or branch or zero) begin
         if (overflow_flag) begin
             rf.rf[7] = overflow;
         end
+        pcsrc = branch & zero;
     end
 
     // ALU logic
