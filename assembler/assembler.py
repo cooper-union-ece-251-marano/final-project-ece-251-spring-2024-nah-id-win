@@ -1,5 +1,6 @@
 from typing import Callable
 from nTypes import *
+from bitstring import *
 
 def removNestings(l):
     output = []
@@ -13,18 +14,18 @@ def removNestings(l):
 instructions: dict[str, list[int, str, int]] = {
     'ADDI' : [-1, 'N'],
     'NOOP' : [0, 'J'],
-    'INC' : [16, 'R'],
-    'DEC' : [17, 'R'],
+    'INC' : [-1, 'N'],
+    'DEC' : [-1, 'N'],
     'RST' : [18, 'R'],
     'J' : [-1, 'N'],
     'JR' : [1, 'J'],
     'BNE' : [2, 'J'],
     'BE' : [3, 'J'],
     'ADD' : [19, 'R'],
-    'LW' : [-1, 'N'],
-    'SW' : [-1, 'N'],
-    'LWOFF' : [20, 'R'],
-    'SWOFF' : [21, 'R'],
+    'LWOFF' : [-1, 'N'],
+    'SWOFF' : [-1, 'N'],
+    'LW' : [14, 'R'],
+    'SW' : [15, 'R'],
     'XOR' : [22, 'R'],
     'AND' : [23, 'R'],
     'OR' : [24, 'R'],
@@ -32,10 +33,9 @@ instructions: dict[str, list[int, str, int]] = {
     'ANDI' : [-1, 'N'],
     'ORI' : [-1, 'N'],
     'SETI' : [-1, 'N'],
-    'SET' : [25, 'R'],
     'MULT' : [26, 'R'],
-    'MFHI' : [27, 'R'],
-    'MFLO' : [28, 'R'],
+    'MFHI' : [-1, 'N'],
+    'MFLO' : [-1, 'N'],
     'BL' : [4, 'J'],
     'BG' : [5, 'J'],
     'BLE' : [6, 'J'],
@@ -43,7 +43,6 @@ instructions: dict[str, list[int, str, int]] = {
     'LIHI' : [9, 'I'],
     'LILO' : [10, 'I'],
     'OUT' : [29, 'R'],
-    'HALT' : [8, 'I'],
     'SLLI' : [-1, 'N'],
     'SLRI' : [-1, 'N'],
     'SLL' : [30, 'R'],
@@ -54,15 +53,19 @@ instructions: dict[str, list[int, str, int]] = {
 nTypeFunctions: dict[str, Callable] = {
     'ADDI' : ADDI,
     'J' : J,
-    'LW' : LW,
-    'SW' : SW,
+    'LWOFF' : LWOFF,
+    'SWOFF' : SWOFF,
     'XORI' : XORI,
     'ANDI' : ANDI,
     'ORI' : ORI,
     'SETI' : SETI,
     'SLLI' : SLLI,
     'SLRI' : SLRI,
-    'JAL' : JAL
+    'JAL' : JAL,
+    'INC' : INC,
+    'DEC' : DEC,
+    'MFHI' : MFHI,
+    'MFLO' : MFLO
 }
 
 blanks: dict[str, int] = {
@@ -102,9 +105,9 @@ def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
                 num = bin(int(halfImm[2:], 16))[2:].rjust(8, '0')
                 op += num
             else:
-                op += bin(int(halfImm))[2:].rjust(8, '0')
+                op += Bits(int=int(halfImm), length=8).bin
         else:
-            op += bin(int(halfImm))[2:].rjust(8, '0')
+            op += Bits(int=int(halfImm), length=8).bin
     elif info[1] == 'J':
         if (values[0] not in 'NOOP'):
             op += bin(registers[values[1].rstrip(',')])[2:].rjust(3, '0')
