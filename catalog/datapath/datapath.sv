@@ -33,7 +33,7 @@ module datapath
     input  logic        alusrc, regdst,
     input  logic        regwrite, jump,
     input  logic [3:0]  alucontrol,
-    output logic        zero, overflow_flag,
+    output logic        zero,
     output logic [(n-1):0] pc,
     input  logic [(n-1):0] instr,
     output logic [(n-1):0] aluout, writedata,
@@ -51,10 +51,11 @@ module datapath
     logic [(n-1):0] jr;
     logic [n-1:0] overflow;
     logic carry_out;
+    logic overflow_flag;
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 16'b1, 1'b0, 1'b1, carry_out, pcplus4);
+    adder       pcadd1(pc, 16'b1, 1'b0, 1'b1, carry_out, pcplus1);
     // sl2         immsh(signimm, signimmsh);
     // adder       pcadd2(pcplus1, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus1, pcbranch, pcsrc, pcnextbr);
@@ -64,7 +65,7 @@ module datapath
     regfile     rf(clk, regwrite, instr[8:6], instr[5:3], writereg, result, srca, writedata);
     mux2 #(3)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
-    signext     se(instr[7:0], signimm);
+    signext #(n, 8)     se(instr[7:0], signimm);
     
     always @(overflow_flag or overflow) begin
         if (overflow_flag) begin

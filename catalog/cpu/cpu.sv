@@ -36,7 +36,7 @@ module cpu
     //
 
     // cpu internal components
-    logic       memtoreg, alusrc, regdst, regwrite, jump, overflow, pcsrc, zero;
+    logic       memtoreg, alusrc, regdst, regwrite, jump, pcsrc, zero;
     logic [3:0] alucontrol;
     logic branch;
     
@@ -47,7 +47,7 @@ module cpu
     datapath dp(clk, reset, memtoreg, pcsrc,
                     alusrc, regdst, regwrite, jump,
                     alucontrol,
-                    zero, overflow, pc, instr,
+                    zero, pc, instr,
                     aluout, writedata, readdata, branch);
 
 endmodule
