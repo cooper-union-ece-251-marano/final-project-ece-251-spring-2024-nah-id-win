@@ -25,6 +25,7 @@ module controller
     //
     input  logic [5:0] op, funct,
     input  logic       zero,
+    input  logic [3:0] aluop
     output logic       memtoreg, memwrite,
     output logic       pcsrc, alusrc,
     output logic       regdst, regwrite,
@@ -34,13 +35,12 @@ module controller
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [1:0] aluop;
     logic       branch;
     
     // CPU main decoder
     maindec md(op, memtoreg, memwrite, branch, alusrc, regdst, regwrite, jump, aluop);
     // CPU's ALU decoder
-    aludec  ad(funct, aluop, alucontrol);
+    // aludec  ad(funct, aluop, alucontrol);
 
   assign pcsrc = branch & zero;
 
