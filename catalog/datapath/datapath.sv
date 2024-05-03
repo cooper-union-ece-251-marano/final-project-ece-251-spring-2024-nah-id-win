@@ -68,6 +68,7 @@ module datapath
     end
 
     // ALU logic
+
     // mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
     alu         alu(clk, srca, srcb, alucontrol, aluout, zero, overflow);
 

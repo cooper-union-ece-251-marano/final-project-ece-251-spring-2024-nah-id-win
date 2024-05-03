@@ -18,6 +18,7 @@
 `include "../definitions/definitions.sv"
 
 module alu
+
     #(parameter n = `WORDSIZE, parameter c_w = `CW)(
     //
     // ---------------- PORT DEFINITIONS ----------------
@@ -31,6 +32,7 @@ module alu
 	output reg [n-1:0] dest,
 	output reg zero,
 	output reg [n-1:0] overflow
+
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
