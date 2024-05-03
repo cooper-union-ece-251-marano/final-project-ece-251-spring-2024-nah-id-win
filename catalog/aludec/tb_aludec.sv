@@ -17,7 +17,7 @@
 `include "aludec.sv"
 
 module tb_aludec;
-    parameter n = 32;
+    parameter n = 16;
 
 endmodule
 `endif // TB_ALUDEC

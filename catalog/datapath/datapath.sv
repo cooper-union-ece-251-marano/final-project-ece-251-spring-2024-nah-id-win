@@ -36,7 +36,7 @@ module datapath
     output logic        zero, overflow_flag,
     output logic [(n-1):0] pc,
     input  logic [(n-1):0] instr,
-    output logic [(n-1):0] aluout, writedata,
+    output logic [(n-1):0] aluout, overflow, writedata,
     input  logic [(n-1):0] readdata
 );
     //

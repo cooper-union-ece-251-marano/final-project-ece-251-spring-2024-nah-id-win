@@ -17,7 +17,7 @@
 `include "cpu.sv"
 
 module tb_cpu;
-    parameter n = 32;
+    parameter n = 16;
 
 endmodule
 `endif // TB_CPU
