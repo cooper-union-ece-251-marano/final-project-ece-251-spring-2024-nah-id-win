@@ -12,65 +12,68 @@ def removNestings(l):
     return output
 
 instructions: dict[str, list[int, str, int]] = {
-    'ADDI' : [-1, 'N'],
     'NOOP' : [0, 'J'],
-    'INC' : [-1, 'N'],
-    'DEC' : [-1, 'N'],
-    'RST' : [18, 'R'],
-    'J' : [-1, 'N'],
     'JR' : [1, 'J'],
     'BNE' : [2, 'J'],
     'BE' : [3, 'J'],
-    'ADD' : [19, 'R'],
-    'LWOFF' : [-1, 'N'],
-    'SWOFF' : [-1, 'N'],
-    'LW' : [14, 'R'],
-    'SW' : [15, 'R'],
-    'XOR' : [22, 'R'],
-    'AND' : [23, 'R'],
-    'OR' : [24, 'R'],
-    'XORI' : [-1, 'N'],
-    'ANDI' : [-1, 'N'],
-    'ORI' : [-1, 'N'],
-    'SETI' : [-1, 'N'],
-    'MULT' : [26, 'R'],
-    'MFHI' : [-1, 'N'],
-    'MFLO' : [-1, 'N'],
     'BL' : [4, 'J'],
     'BG' : [5, 'J'],
     'BLE' : [6, 'J'],
     'BGE' : [7, 'J'],
-    'LIHI' : [9, 'I'],
     'LILO' : [10, 'I'],
-    'OUT' : [29, 'R'],
-    'SLLI' : [-1, 'N'],
-    'SLRI' : [-1, 'N'],
+    'LW' : [14, 'R'],
+    'SW' : [15, 'R'],
+    'RST' : [18, 'R'],
+    'ADD' : [19, 'R'],
+    'XOR' : [22, 'R'],
+    'AND' : [23, 'R'],
+    'OR' : [24, 'R'],
+    'MULT' : [26, 'R'],
     'SLL' : [30, 'R'],
     'SLR' : [31, 'R'],
-    'JAL' : [-1, 'N']
+    'ADDI' : [-1, 'N'],
+    'INC' : [-1, 'N'],
+    'DEC' : [-1, 'N'],
+    'J' : [-1, 'N'],
+    'LWOFF' : [-1, 'N'],
+    'SWOFF' : [-1, 'N'],
+    'XORI' : [-1, 'N'],
+    'ANDI' : [-1, 'N'],
+    'ORI' : [-1, 'N'],
+    'SETI' : [-1, 'N'],
+    'MFHI' : [-1, 'N'],
+    'MFLO' : [-1, 'N'],
+    'LIHI' : [-1, 'N'],
+    'SLLI' : [-1, 'N'],
+    'SLRI' : [-1, 'N'],
+    'JAL' : [-1, 'N'],
+    'SET' : [-1, 'N'],
+    'SETI' : [-1, 'N']
 }
 
 nTypeFunctions: dict[str, Callable] = {
     'ADDI' : ADDI,
+    'LIHI' : LIHI,
     'J' : J,
     'LWOFF' : LWOFF,
     'SWOFF' : SWOFF,
     'XORI' : XORI,
     'ANDI' : ANDI,
     'ORI' : ORI,
-    'SETI' : SETI,
     'SLLI' : SLLI,
     'SLRI' : SLRI,
     'JAL' : JAL,
     'INC' : INC,
     'DEC' : DEC,
     'MFHI' : MFHI,
-    'MFLO' : MFLO
+    'MFLO' : MFLO,
+    'SET' : SET,
+    'SETI' : SETI
 }
 
 blanks: dict[str, int] = {
     'R' : 2,
-    'I' : 3,
+    'I' : 0,
     'J' : 8,
     'N' : 0
 }
@@ -95,6 +98,8 @@ def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
     if info[1] == 'R':
         for reg in values[1:]:
             op += bin(registers[reg.rstrip(',')])[2:].rjust(3, '0')
+        if (values[0] == 'MULT'):
+            op += '110'
     elif info[1] == 'I':
         halfImm: str = values[1]
         if len(halfImm) >= 3:
@@ -108,6 +113,7 @@ def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
                 op += Bits(int=int(halfImm), length=8).bin
         else:
             op += Bits(int=int(halfImm), length=8).bin
+        op += '011'
     elif info[1] == 'J':
         if (values[0] not in 'NOOP'):
             op += bin(registers[values[1].rstrip(',')])[2:].rjust(3, '0')

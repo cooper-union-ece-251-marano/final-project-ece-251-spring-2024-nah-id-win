@@ -33,39 +33,44 @@ module datapath
     input  logic        alusrc, regdst,
     input  logic        regwrite, jump,
     input  logic [3:0]  alucontrol,
-    output logic        zero,
+    output logic        zero, overflow_flag,
     output logic [(n-1):0] pc,
     input  logic [(n-1):0] instr,
-    output logic [(n-1):0] aluout, writedata,
+    output logic [(n-1):0] aluout, overflow, writedata,
     input  logic [(n-1):0] readdata
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [2:0] writereg;
-    logic [(n-1):0] pcnext, pcnextbr, pcplus4, pcbranch;
+    logic [2:0]  writereg;
+    logic [(n-1):0] pcnext, pcnextbr, pcplus1, pcbranch;
     logic [(n-1):0] signimm, signimmsh;
     logic [(n-1):0] srca, srcb;
     logic [(n-1):0] result;
-    logic carry_out;
+    logic [(n-1):0] jr;
+    logic [n-1:0] overflow;
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 16'b1, 1'b0, 1'b1, carry_out, pcplus4);
-    sl2         immsh(signimm, signimmsh);
-    adder       pcadd2(pcplus4, signimmsh, pcbranch);
-    mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
-    mux2 #(n)   pcmux(pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, jump, pcnext);
+    adder       pcadd1(pc, 16'b1, pcplus1);
+    // sl2         immsh(signimm, signimmsh);
+    // adder       pcadd2(pcplus1, signimmsh, pcbranch);
+    mux2 #(n)   pcbrmux(pcplus1, pcbranch, pcsrc, pcnextbr);
+    mux2 #(n)   pcmux(pcnextbr, rf.rf[jr], jump, pcnext);
 
     // register file logic
-    regfile     rf(clk, regwrite, instr[25:21], instr[20:16], writereg, result, srca, writedata);
-    mux2 #(5)   wrmux(instr[20:16], instr[15:11], regdst, writereg);
+    regfile     rf(clk, regwrite, instr[8:6], instr[5:3], writereg, result, srca, writedata);
+    mux2 #(3)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
-    signext     se(instr[15:0], signimm);
+    signext     se(instr[7:0], signimm);
+    if (overflow_flag) begin
+        rf.rf[7] = overflow;
+    end
 
     // ALU logic
-    mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
-    alu         alu(alucontrol, srca, srcb, aluout, zero);
+
+    // mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
+    alu         alu(clk, srca, srcb, alucontrol, aluout, zero, overflow);
 
 endmodule
 

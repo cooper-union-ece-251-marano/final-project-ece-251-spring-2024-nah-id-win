@@ -16,7 +16,7 @@ def ADDI(line: str) -> list[str]:
     dest: str = values[0].rstrip(',')
     src: str = values[1].rstrip(',')
     imm: str = immToBin(values[2].rstrip(','))
-    return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'ADD {dest}, {src}, $im']
+    return [f'LILO 0b{imm[8:]}', f'LIHI 0b{imm[:8]}', f'ADD {dest}, {src}, $im']
 
 @lru_cache(maxsize=128)
 def INC(line: str) -> list[str]:
@@ -28,7 +28,7 @@ def INC(line: str) -> list[str]:
 def DEC(line: str) -> list[str]:
     values: list[str] = line.split()[1:]
     src: str = values[0].rstrip(',')
-    return [f'ADDI {src}, {src}, 0b1111111111111111']
+    return [f'ADDI {src}, {src}, -1']
 
 @lru_cache(maxsize=128)
 def XORI(line: str) -> list[str]:
@@ -36,7 +36,7 @@ def XORI(line: str) -> list[str]:
     dest: str = values[0].rstrip(',')
     src: str = values[1].rstrip(',')
     imm: str = immToBin(values[2].rstrip(','))
-    return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'XOR {dest}, {src}, $im']
+    return [f'LILO 0b{imm[8:]}', f'LIHI 0b{imm[:8]}', f'XOR {dest}, {src}, $im']
 
 @lru_cache(maxsize=128)
 def ANDI(line: str) -> list[str]:
@@ -44,7 +44,7 @@ def ANDI(line: str) -> list[str]:
     dest: str = values[0].rstrip(',')
     src: str = values[1].rstrip(',')
     imm: str = immToBin(values[2].rstrip(','))
-    return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'AND {dest}, {src}, $im']
+    return [f'LILO 0b{imm[8:]}', f'LIHI 0b{imm[:8]}', f'AND {dest}, {src}, $im']
 
 @lru_cache(maxsize=128)
 def ORI(line: str) -> list[str]:
@@ -52,14 +52,7 @@ def ORI(line: str) -> list[str]:
     dest: str = values[0].rstrip(',')
     src: str = values[1].rstrip(',')
     imm: str = immToBin(values[2].rstrip(','))
-    return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'OR {dest}, {src}, $im']
-
-@lru_cache(maxsize=128)
-def SETI(line: str) -> list[str]:
-    values: list[str] = line.split()[1:]
-    dest: str = values[0].rstrip(',')
-    imm: str = immToBin(values[1].rstrip(','))
-    return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'RST {dest}', f'ADDI {dest}, $im']
+    return [f'LILO 0b{imm[8:]}', f'LIHI 0b{imm[:8]}', f'OR {dest}, {src}, $im']
 
 @lru_cache(maxsize=128)
 def SLLI(line: str) -> list[str]:
@@ -94,12 +87,33 @@ def LWOFF(line: str) -> list[str]:
     return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'ADD {src2}, $im, {src2}', f'LW {src1}, {src2}']
 
 @lru_cache(maxsize=128)
+def SETI(line: str) -> list[str]:
+    values: list[str] = line.split()[1:]
+    dest: str = values[0].rstrip(',')
+    imm: str = immToBin(values[1].rstrip(','))
+    return [f'RST {dest}', f'ADDI {dest}, {dest}, {imm}']
+
+@lru_cache(maxsize=128)
+def SET(line: str) -> list[str]:
+    values: list[str] = line.split()[1:]
+    dest: str = values[0].rstrip(',')
+    src: str = values[1].rstrip(',')
+    return [f'RST {dest}', f'ADD {dest}, {dest}, {src}']
+
+@lru_cache(maxsize=128)
 def SWOFF(line: str) -> list[str]:
     values: list[str] = line.split()[1:]
     src1: str = values[0].rstrip(',')
     src2: str = values[1].rstrip(',')
     imm: str = immToBin(values[2].rstrip(','))
-    return [f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'ADD {src2}, $im, {src2}', f'SW {src1}, {src2}']
+    return [f'LILO 0b{imm[8:]}', f'LIHI 0b{imm[:8]}', f'ADD {src2}, $im, {src2}', f'SW {src1}, {src2}']
+
+@lru_cache(maxsize=128)
+def LIHI(line: str) -> list[str]:
+    values: list[str] = line.split()[1:]
+    imm = immToBin(values[0].rstrip(','))
+    imm: str = immToBin(values[0].rstrip(','))[8:16]
+    return [f'SET $lo, $im', f'LILO 0b{imm}', f'SET $hi, $im', f'LILO 0b1000', f'SLL $hi, $hi, $im', f'OR $im, $hi, $lo']
 
 def JAL(line: str, labels: dict[str, int], insCount: int) -> list[str]:
     values: list[str] = line.split()[1:]
@@ -107,7 +121,7 @@ def JAL(line: str, labels: dict[str, int], insCount: int) -> list[str]:
     if ji[0] == '.':
         ji = str(labels[ji])
     imm = immToBin(ji)
-    return [f'SETI $ra, {insCount+6}', f'LIHI 0b{imm[:8]}', f'LILO 0b{imm[8:]}', f'JR $im']
+    return [f'RST $ra', f'ADDI $ra, $ra, {insCount+6}', f'LILO 0b{imm[8:]}', f'LIHI 0b{imm[:8]}', f'JR $im']
 
 @lru_cache(maxsize=128)
 def MFLO(line: str) -> list[str]:
