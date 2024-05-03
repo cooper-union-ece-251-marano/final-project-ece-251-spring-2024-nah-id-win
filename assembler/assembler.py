@@ -47,7 +47,9 @@ instructions: dict[str, list[int, str, int]] = {
     'SLRI' : [-1, 'N'],
     'SLL' : [30, 'R'],
     'SLR' : [31, 'R'],
-    'JAL' : [-1, 'N']
+    'JAL' : [-1, 'N'],
+    'SET' : [-1, 'N'],
+    'SETI' : [-1, 'N']
 }
 
 nTypeFunctions: dict[str, Callable] = {
@@ -58,19 +60,20 @@ nTypeFunctions: dict[str, Callable] = {
     'XORI' : XORI,
     'ANDI' : ANDI,
     'ORI' : ORI,
-    'SETI' : SETI,
     'SLLI' : SLLI,
     'SLRI' : SLRI,
     'JAL' : JAL,
     'INC' : INC,
     'DEC' : DEC,
     'MFHI' : MFHI,
-    'MFLO' : MFLO
+    'MFLO' : MFLO,
+    'SET' : SET,
+    'SETI' : SETI
 }
 
 blanks: dict[str, int] = {
     'R' : 2,
-    'I' : 3,
+    'I' : 0,
     'J' : 8,
     'N' : 0
 }
@@ -108,6 +111,7 @@ def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
                 op += Bits(int=int(halfImm), length=8).bin
         else:
             op += Bits(int=int(halfImm), length=8).bin
+        op += '011'
     elif info[1] == 'J':
         if (values[0] not in 'NOOP'):
             op += bin(registers[values[1].rstrip(',')])[2:].rjust(3, '0')

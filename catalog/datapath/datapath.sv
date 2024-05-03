@@ -59,12 +59,12 @@ module datapath
 
     // register file logic
     regfile     rf(clk, regwrite, instr[8:6], instr[5:3], writereg, result, srca, writedata);
-    mux2 #(5)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
+    mux2 #(3)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
     signext     se(instr[7:0], signimm);
 
     // ALU logic
-    mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
+    // mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
     alu         alu(clk, srca, srcb, alucontrol, aluout, zero);
 
 endmodule

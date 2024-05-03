@@ -46,8 +46,8 @@ module maindec
             5'b00101: controls <= 10'b0010001011; // BG
             5'b00110: controls <= 10'b0010001100; // BLE
             5'b00111: controls <= 10'b0010001101; // BGE
-            5'b01001: controls <= 10'b0000001110; // LIHI
-            5'b01010: controls <= 10'b0000001111; // LILO
+            5'b01001: controls <= 10'b1100001110; // LIHI
+            5'b01010: controls <= 10'b1100001111; // LILO
             5'b01110: controls <= 10'b1000100000; // LW
             5'b01111: controls <= 10'b0001000000; // SW
             5'b10010: controls <= 10'b1000000111; // RST
