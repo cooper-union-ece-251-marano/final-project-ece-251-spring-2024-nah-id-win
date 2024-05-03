@@ -20,5 +20,8 @@
 `define X_REG 5
 `define HI_REG 6
 `define LO_REG 7
+`define WORDSIZE 16
+`define CW 4
+
 
 `endif //DEFINITIONS
