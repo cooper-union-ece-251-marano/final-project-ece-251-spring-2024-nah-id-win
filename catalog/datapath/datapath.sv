@@ -24,7 +24,7 @@
 `include "../signext/signext.sv"
 
 module datapath
-    #(parameter n = 32)(
+    #(parameter n = 16)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
@@ -32,7 +32,7 @@ module datapath
     input  logic        memtoreg, pcsrc,
     input  logic        alusrc, regdst,
     input  logic        regwrite, jump,
-    input  logic [2:0]  alucontrol,
+    input  logic [3:0]  alucontrol,
     output logic        zero,
     output logic [(n-1):0] pc,
     input  logic [(n-1):0] instr,
@@ -42,7 +42,7 @@ module datapath
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [4:0]  writereg;
+    logic [2:0]  writereg;
     logic [(n-1):0] pcnext, pcnextbr, pcplus4, pcbranch;
     logic [(n-1):0] signimm, signimmsh;
     logic [(n-1):0] srca, srcb;
@@ -50,7 +50,7 @@ module datapath
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 32'b100, pcplus4);
+    adder       pcadd1(pc, 16'b10, pcplus4);
     sl2         immsh(signimm, signimmsh);
     adder       pcadd2(pcplus4, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
