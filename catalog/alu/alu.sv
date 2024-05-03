@@ -15,6 +15,8 @@
 
 `timescale 1ns/100ps
 
+`include "../definitions/definitions.sv"
+
 module alu
     #(	parameter n = 16
 		parameter c_w = 4)(
@@ -22,19 +24,23 @@ module alu
     // ---------------- PORT DEFINITIONS ----------------
     //
 	
-	input [c_w-1:0] controlCommand;
-	input [n-1:0] src1, src2;
+	input [c_w-1:0] controlCommand,
+	input [n-1:0] src1, src2,
 
-	reg [n-1:0] dest;
+	output reg [n-1:0] dest,
+	output reg zero,
+	output reg overflow
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
 
+	
+
 	always@(controlCommand, src1, src2) begin
 		case (controlCommand)
 			// ADD
-			0:	dest <= src1 + src2;
+			0:	{overflow, dest} <= src1 + src2;
 			// AND
 			1:	dest <= src1 & src2;
 			// OR
@@ -42,8 +48,11 @@ module alu
 			// XOR
 			3:	dest <= src1 ^ src2;
 			// MULT
-			// HI and LO get stored in registers 4 and 5.
-			4:		
+			4:	multResult <= src1 * src2;
+			// SLL
+			5:	dest <= src1 << src2
+			// SLR
+			6:	dest <= 
 		endcase
 	end
 

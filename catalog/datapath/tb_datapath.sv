@@ -17,7 +17,7 @@
 `include "datapath.sv"
 
 module tb_datapath;
-    parameter n = 32;
+    parameter n = 16;
 
 endmodule
 `endif // TB_DATAPATH

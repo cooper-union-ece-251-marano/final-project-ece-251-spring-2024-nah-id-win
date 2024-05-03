@@ -17,7 +17,7 @@
 `include "regfile.sv"
 
 module tb_regfile;
-    parameter n = 32;
+    parameter n = 16;
 
 endmodule
 `endif // TB_REGFILE

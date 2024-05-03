@@ -19,7 +19,7 @@
 `include "../aludec/aludec.sv"
 
 module controller
-    #(parameter n = 32)(
+    #(parameter n = 16)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //

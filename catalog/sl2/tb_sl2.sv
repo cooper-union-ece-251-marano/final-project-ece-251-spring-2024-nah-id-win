@@ -17,7 +17,7 @@
 `include "sl2.sv"
 
 module tb_sl2;
-    parameter n = 32;
+    parameter n = 16;
     logic [(n-1):0] a, y;
 
    initial begin

@@ -17,7 +17,7 @@
 `include "signext.sv"
 
 module tb_sl2;
-    parameter n = 32; // #bits for an operand
+    parameter n = 16; // #bits for an operand
     parameter i = n/2; // #bits for an immediate
     logic [(i-1):0] a;
     logic [(n-1):0] y;

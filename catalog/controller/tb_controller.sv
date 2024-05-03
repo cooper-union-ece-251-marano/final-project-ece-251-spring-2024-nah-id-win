@@ -17,7 +17,7 @@
 `include "controller.sv"
 
 module tb_controller;
-    parameter n = 32;
+    parameter n = 16;
 
 endmodule
 `endif // TB_CONTROLLER
