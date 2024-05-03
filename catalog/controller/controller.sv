@@ -25,7 +25,7 @@ module controller
     //
     input  logic [5:0] op, funct,
     input  logic       zero,
-    input  logic [3:0] aluop
+    input  logic [3:0] aluop,
     output logic       memtoreg, memwrite,
     output logic       pcsrc, alusrc,
     output logic       regdst, regwrite,

@@ -47,10 +47,11 @@ module datapath
     logic [(n-1):0] signimm, signimmsh;
     logic [(n-1):0] srca, srcb;
     logic [(n-1):0] result;
+    logic carry_out;
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 16'b10, pcplus4);
+    adder       pcadd1(pc, 16'b1, 1'b0, 1'b1, carry_out, pcplus4);
     sl2         immsh(signimm, signimmsh);
     adder       pcadd2(pcplus4, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);

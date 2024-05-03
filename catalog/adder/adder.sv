@@ -31,6 +31,7 @@ module adder
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
+
 	always @(a or b or enable) begin
 		if(enable) begin
 			{c_out, out} = a + b + c_in;

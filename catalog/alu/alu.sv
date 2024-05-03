@@ -22,9 +22,9 @@ module alu
     // ---------------- PORT DEFINITIONS ----------------
     //
 	
-	input logic [c_w-1:0] controlCommand;
+	input logic [c_w-1:0] controlCommand,
 	input logic [n-1:0] src1, src2,
-	output logic [n-1:0] dest;
+	output logic [n-1:0] dest
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
@@ -42,7 +42,7 @@ module alu
 			3:	dest <= src1 ^ src2;
 			// MULT
 			// HI and LO get stored in registers 4 and 5.
-			4:		
+			// 4:		
 		endcase
 	end
 
