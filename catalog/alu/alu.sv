@@ -23,10 +23,11 @@ module alu
     // ---------------- PORT DEFINITIONS ----------------
     //
 	
-	input [c_w-1:0] aluop,
+	input clk,
 	input [n-1:0] src1, 	
 	input [n-1:0] src2,
-
+	input [c_w-1:0] aluop,
+	
 	output reg [n-1:0] dest,
 	output reg zero,
 	output reg [n-1:0] overflow
@@ -35,7 +36,7 @@ module alu
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
 
-	always@(aluop, src1, src2) begin
+	always@(posedge clk) begin
 		case (aluop)
 			'd0: begin	//ADD
 				{overflow, dest} = src1 + src2;
