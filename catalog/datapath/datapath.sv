@@ -36,8 +36,9 @@ module datapath
     output logic        zero, overflow_flag,
     output logic [(n-1):0] pc,
     input  logic [(n-1):0] instr,
-    output logic [(n-1):0] aluout, overflow, writedata,
-    input  logic [(n-1):0] readdata
+    output logic [(n-1):0] aluout, writedata,
+    input  logic [(n-1):0] readdata,
+    input  logic           branch
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
@@ -49,10 +50,11 @@ module datapath
     logic [(n-1):0] result;
     logic [(n-1):0] jr;
     logic [n-1:0] overflow;
+    logic carry_out;
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 16'b1, pcplus1);
+    adder       pcadd1(pc, 16'b1, 1'b0, 1'b1, carry_out, pcplus4);
     // sl2         immsh(signimm, signimmsh);
     // adder       pcadd2(pcplus1, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus1, pcbranch, pcsrc, pcnextbr);
@@ -63,12 +65,14 @@ module datapath
     mux2 #(3)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
     signext     se(instr[7:0], signimm);
-    if (overflow_flag) begin
-        rf.rf[7] = overflow;
+    
+    always @(overflow_flag or overflow) begin
+        if (overflow_flag) begin
+            rf.rf[7] = overflow;
+        end
     end
 
     // ALU logic
-
     // mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
     alu         alu(clk, srca, srcb, alucontrol, aluout, zero, overflow);
 
