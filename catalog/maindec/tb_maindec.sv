@@ -17,7 +17,7 @@
 `include "maindec.sv"
 
 module tb_maindec;
-    parameter n = 32;
+    parameter n = 16;
 
 endmodule
 `endif // TB_MAINDEC

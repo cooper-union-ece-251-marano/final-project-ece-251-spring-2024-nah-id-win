@@ -20,7 +20,7 @@
 `include "../dmem/dmem.sv"
 
 module computer
-    #(parameter n = 32)(
+    #(parameter n = 16)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //

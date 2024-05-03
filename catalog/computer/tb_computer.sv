@@ -19,7 +19,7 @@
 `include "../clock/clock.sv"
 
 module tb_computer;
-  parameter n = 32; // # bits to represent the instruction / ALU operand / general purpose register (GPR)
+  parameter n = 16; // # bits to represent the instruction / ALU operand / general purpose register (GPR)
   parameter m = 5;  // # bits to represent the address of the 2**m=32 GPRs in the CPU
   logic clk;
   logic clk_enable;

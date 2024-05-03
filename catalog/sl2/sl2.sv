@@ -16,7 +16,7 @@
 `timescale 1ns/100ps
 
 module sl2
-    #(parameter n = 32)(
+    #(parameter n = 16)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //

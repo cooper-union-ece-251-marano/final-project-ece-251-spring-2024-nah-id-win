@@ -18,7 +18,7 @@
 `include "../clock/clock.sv"
 
 module tb_mux2;
-    parameter n = 32; // #bits for an operand
+    parameter n = 16; // #bits for an operand
     logic s;
     logic [(n-1):0] d0, d1;
     logic [(n-1):0] y;
