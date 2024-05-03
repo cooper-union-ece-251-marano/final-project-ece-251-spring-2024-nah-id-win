@@ -98,6 +98,8 @@ def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
     if info[1] == 'R':
         for reg in values[1:]:
             op += bin(registers[reg.rstrip(',')])[2:].rjust(3, '0')
+        if (values[0] == 'MULT'):
+            op += '110'
     elif info[1] == 'I':
         halfImm: str = values[1]
         if len(halfImm) >= 3:

@@ -26,7 +26,7 @@ module controller
     input  logic [4:0] op,
     output logic       memtoreg, memwrite,
     output logic       regdst, regwrite,
-    output logic       jump,
+    output logic       jump, overflow,
     output logic [3:0] alucontrol
 );
     //
@@ -36,7 +36,8 @@ module controller
     logic       branch;
     
     // CPU main decoder
-    maindec md(op, memtoreg, memwrite, branch, regdst, regwrite, jump, aluop);
+    maindec md(op, memtoreg, memwrite, branch, regdst, regwrite, jump, overflow, aluop);
+    
     // CPU's ALU decoder
     aludec  ad(funct, aluop, alucontrol);
 

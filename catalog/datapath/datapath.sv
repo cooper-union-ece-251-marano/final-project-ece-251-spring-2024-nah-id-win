@@ -48,6 +48,7 @@ module datapath
     logic [(n-1):0] srca, srcb;
     logic [(n-1):0] result;
     logic [(n-1):0] jr;
+    logic [n-1:0] overflow;
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
@@ -65,7 +66,7 @@ module datapath
 
     // ALU logic
     // mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
-    alu         alu(clk, srca, srcb, alucontrol, aluout, zero);
+    alu         alu(clk, srca, srcb, alucontrol, aluout, zero, overflow);
 
 endmodule
 
