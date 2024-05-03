@@ -23,22 +23,21 @@ module controller
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
-    input  logic [5:0] op, funct,
-    input  logic       zero,
+    input  logic [4:0] op,
     output logic       memtoreg, memwrite,
-    output logic       pcsrc, alusrc,
     output logic       regdst, regwrite,
-    output logic       jump,
-    output logic [2:0] alucontrol
+    output logic       jump, overflow,
+    output logic [3:0] alucontrol
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [1:0] aluop;
+    logic [3:0] aluop;
     logic       branch;
     
     // CPU main decoder
-    maindec md(op, memtoreg, memwrite, branch, alusrc, regdst, regwrite, jump, aluop);
+    maindec md(op, memtoreg, memwrite, branch, regdst, regwrite, jump, overflow, aluop);
+    
     // CPU's ALU decoder
     aludec  ad(funct, aluop, alucontrol);
 

@@ -25,8 +25,8 @@ module tb_computer;
   logic clk_enable;
   logic reset;
   logic memwrite;
-  logic [31:0] writedata;
-  logic [31:0] dataadr;
+  logic [15:0] writedata;
+  logic [15:0] dataadr;
 
   logic firstTest, secondTest;
 

@@ -5,7 +5,7 @@
 // 
 //     Create Date: 2023-02-07
 //     Module Name: computer
-//     Description: 32-bit RISC
+//     Description: 16-bit RISC
 //
 // Revision: 1.0
 //
@@ -32,8 +32,6 @@ module computer
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
     logic [(n-1):0] pc, instr, readdata;
-
-    // computer internal components
 
     // the RISC CPU
     cpu mips(clk, reset, pc, instr, memwrite, dataadr, writedata, readdata);
