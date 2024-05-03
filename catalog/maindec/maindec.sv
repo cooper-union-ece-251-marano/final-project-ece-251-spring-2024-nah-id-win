@@ -30,9 +30,9 @@ module maindec
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [8:0] controls; // 9-bit control vector
+    logic [9:0] controls; // 10-bit control vector
 
-    // controls has 9 logical signals
+    // controls has 10 logical signals
     assign {regwrite, regdst, branch, memwrite,
             memtoreg, jump, aluop} = controls;
 
