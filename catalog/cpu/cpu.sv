@@ -44,14 +44,10 @@ module cpu
                     alusrc, regdst, regwrite, jump, overflow,
                     alucontrol);
 
-    if (overflow) begin
-        dp.rf.rf[7] = dp.overflow;
-    end
-
     datapath dp(clk, reset, memtoreg, pcsrc,
                     alusrc, regdst, regwrite, jump,
                     alucontrol,
-                    zero, pc, instr,
+                    zero, overflow, pc, instr,
                     aluout, writedata, readdata);
 
 endmodule

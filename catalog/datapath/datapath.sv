@@ -33,7 +33,7 @@ module datapath
     input  logic        alusrc, regdst,
     input  logic        regwrite, jump,
     input  logic [3:0]  alucontrol,
-    output logic        zero,
+    output logic        zero, overflow_flag,
     output logic [(n-1):0] pc,
     input  logic [(n-1):0] instr,
     output logic [(n-1):0] aluout, overflow, writedata,
@@ -63,6 +63,9 @@ module datapath
     mux2 #(3)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
     signext     se(instr[7:0], signimm);
+    if (overflow_flag) begin
+        rf.rf[7] = overflow;
+    end
 
     // ALU logic
     // mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
