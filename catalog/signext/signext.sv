@@ -16,7 +16,7 @@
 `timescale 1ns/100ps
 
 module signext
-    #(parameter n = 32, i = 16)(
+    #(parameter n = 16, i = 16)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //

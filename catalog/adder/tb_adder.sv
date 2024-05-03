@@ -17,7 +17,7 @@
 `include "adder.sv"
 
 module tb_adder;
-    parameter n = 32;
+    parameter n = 16;
     logic [(n-1):0] a, b, y;
 
    initial begin

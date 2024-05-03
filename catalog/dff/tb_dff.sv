@@ -18,7 +18,7 @@
 `include "../clock/clock.sv"
 
 module tb_dff;
-    parameter n = 32; // #bits for an operand
+    parameter n = 16; // #bits for an operand
     wire clk;
     logic enable;
     logic reset;
