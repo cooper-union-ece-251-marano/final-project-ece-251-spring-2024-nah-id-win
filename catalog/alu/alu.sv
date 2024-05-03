@@ -16,16 +16,15 @@
 `timescale 1ns/100ps
 
 module alu
-    #(	parameter n = 16
+    #(	parameter n = 16,
 		parameter c_w = 4)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
 	
-	input [c_w-1:0] controlCommand;
-	input [n-1:0] src1, src2;
-
-	reg [n-1:0] dest;
+	input logic [c_w-1:0] controlCommand;
+	input logic [n-1:0] src1, src2,
+	output logic [n-1:0] dest;
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------

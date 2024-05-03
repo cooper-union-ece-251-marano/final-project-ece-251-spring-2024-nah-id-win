@@ -42,7 +42,7 @@ module datapath
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [2:0]  writereg;
+    logic [2:0] writereg;
     logic [(n-1):0] pcnext, pcnextbr, pcplus4, pcbranch;
     logic [(n-1):0] signimm, signimmsh;
     logic [(n-1):0] srca, srcb;
@@ -64,7 +64,7 @@ module datapath
 
     // ALU logic
     mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
-    alu         alu(clk, srca, srcb, alucontrol, aluout, zero);
+    alu         alu(alucontrol, srca, srcb, aluout, zero);
 
 endmodule
 

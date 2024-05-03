@@ -37,7 +37,7 @@ module cpu
 
     // cpu internal components
     logic       memtoreg, alusrc, regdst, regwrite, jump, pcsrc, zero;
-    logic [2:0] alucontrol;
+    logic [3:0] alucontrol;
     
     controller c(instr[(31):26], instr[5:0], zero,
                     memtoreg, memwrite, pcsrc,
