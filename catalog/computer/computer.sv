@@ -13,6 +13,8 @@
 `ifndef COMPUTER
 `define COMPUTER
 
+`include "../definitions/definitions.sv"
+`include "../definitions/definitions.sv"
 `timescale 1ns/100ps
 
 `include "../cpu/cpu.sv"

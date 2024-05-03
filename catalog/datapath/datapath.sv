@@ -32,7 +32,7 @@ module datapath
     input  logic        memtoreg, pcsrc,
     input  logic        alusrc, regdst,
     input  logic        regwrite, jump,
-    input  logic [3:0]  alucontrol,
+    input  logic [3:0]  aluop,
     output logic        zero,
     output logic [(n-1):0] pc,
     input  logic [(n-1):0] instr,
@@ -54,17 +54,17 @@ module datapath
     sl2         immsh(signimm, signimmsh);
     adder       pcadd2(pcplus4, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
-    mux2 #(n)   pcmux(pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, jump, pcnext);
+    mux2 #(n)   pcmux(pcnextbr, {pcplus4[15:12], instr[11:0]}, jump, pcnext);
 
     // register file logic
-    regfile     rf(clk, regwrite, instr[25:21], instr[20:16], writereg, result, srca, writedata);
-    mux2 #(5)   wrmux(instr[20:16], instr[15:11], regdst, writereg);
+    regfile     rf(clk, regwrite, instr[8:6], instr[5:3], writereg, result, srca, writedata);
+    mux2 #(3)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
-    signext     se(instr[15:0], signimm);
+    signext     se(instr[7:0], signimm);
 
     // ALU logic
     mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
-    alu         alu(clk, srca, srcb, alucontrol, aluout, zero, overflow);
+    alu         alu(clk, srca, srcb, aluop, aluout, zero, overflow);
 
 endmodule
 

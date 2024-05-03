@@ -13,20 +13,21 @@
 `ifndef TB_COMPUTER
 `define TB_COMPUTER
 
+`include "../definitions/definitions.sv"
 `timescale 1ns/100ps
 
 `include "computer.sv"
 `include "../clock/clock.sv"
 
 module tb_computer;
-  parameter n = 16; // # bits to represent the instruction / ALU operand / general purpose register (GPR)
+  parameter n = `WORDSIZE; // # bits to represent the instruction / ALU operand / general purpose register (GPR)
   parameter m = 5;  // # bits to represent the address of the 2**m=32 GPRs in the CPU
   logic clk;
   logic clk_enable;
   logic reset;
   logic memwrite;
-  logic [31:0] writedata;
-  logic [31:0] dataadr;
+  logic [n-1:0] writedata;
+  logic [n-1:0] dataadr;
 
   logic firstTest, secondTest;
 
@@ -66,17 +67,18 @@ module tb_computer;
       $display("\t+instr = 0x%8h",dut.instr);
       $display("\t+op = 0b%6b",dut.mips.c.op);
       $display("\t+controls = 0b%9b",dut.mips.c.md.controls);
-      $display("\t+funct = 0b%6b",dut.mips.c.ad.funct);
-      $display("\t+aluop = 0b%2b",dut.mips.c.ad.aluop);
-      $display("\t+alucontrol = 0b%3b",dut.mips.c.ad.alucontrol);
-      $display("\t+alu result = 0x%8h",dut.mips.dp.alu.result);
-      $display("\t+HiLo = 0x%8h",dut.mips.dp.alu.HiLo);
-      $display("\t+$v0 = 0x%4h",dut.mips.dp.rf.rf[2]);
-      $display("\t+$v1 = 0x%4h",dut.mips.dp.rf.rf[3]);
-      $display("\t+$a0 = 0x%4h",dut.mips.dp.rf.rf[4]);
-      $display("\t+$a1 = 0x%4h",dut.mips.dp.rf.rf[5]);
-      $display("\t+$t0 = 0x%4h",dut.mips.dp.rf.rf[8]);
-      $display("\t+$t1 = 0x%4h",dut.mips.dp.rf.rf[9]);
+      //$display("\t+funct = 0b%6b",dut.mips.c.ad.funct);
+      $display("\t+aluop = 0b%2b",dut.mips.c.aluop);
+      //$display("\t+alucontrol = 0b%3b",dut.mips.c.ad.alucontrol);
+      $display("\t+alu result = 0x%8h",dut.mips.dp.alu.dest);
+      //TODO implement HiLO
+	  //$display("\t+HiLo = 0x%8h",dut.mips.dp.alu.HiLo);
+      $display("\t+$ra = 0x%4h",dut.mips.dp.rf.rf[2]);
+      $display("\t+$im = 0x%4h",dut.mips.dp.rf.rf[3]);
+      $display("\t+$a = 0x%4h",dut.mips.dp.rf.rf[4]);
+      $display("\t+$x = 0x%4h",dut.mips.dp.rf.rf[5]);
+      $display("\t+$hi = 0x%4h",dut.mips.dp.rf.rf[6]);
+      $display("\t+$lo = 0x%4h",dut.mips.dp.rf.rf[7]);
       $display("\t+regfile -- ra1 = %d",dut.mips.dp.rf.ra1);
       $display("\t+regfile -- ra2 = %d",dut.mips.dp.rf.ra2);
       $display("\t+regfile -- we3 = %d",dut.mips.dp.rf.we3);
@@ -92,27 +94,28 @@ module tb_computer;
   // monitor what happens at negedge of clock transition
   always @(negedge clk) begin
     $display("-");
-    $display("\t-instr = 0x%8h",dut.instr);
-    $display("\t-op = 0b%6b",dut.mips.c.op);
-    $display("\t-controls = 0b%9b",dut.mips.c.md.controls);
-    $display("\t-funct = 0b%6b",dut.mips.c.ad.funct);
-    $display("\t-aluop = 0b%2b",dut.mips.c.ad.aluop);
-    $display("\t-alucontrol = 0b%3b",dut.mips.c.ad.alucontrol);
-    $display("\t-alu result = 0x%8h",dut.mips.dp.alu.result);
-    $display("\t-HiLo = 0x%8h",dut.mips.dp.alu.HiLo);
-    $display("\t-$v0 = 0x%4h",dut.mips.dp.rf.rf[2]);
-    $display("\t-$v1 = 0x%4h",dut.mips.dp.rf.rf[3]);
-    $display("\t-$a0 = 0x%4h",dut.mips.dp.rf.rf[4]);
-    $display("\t-$a1 = 0x%4h",dut.mips.dp.rf.rf[5]);
-    $display("\t-$t0 = 0x%4h",dut.mips.dp.rf.rf[8]);
-    $display("\t-$t1 = 0x%4h",dut.mips.dp.rf.rf[9]);
-    $display("\t-regfile -- ra1 = %d",dut.mips.dp.rf.ra1);
-    $display("\t-regfile -- ra2 = %d",dut.mips.dp.rf.ra2);
-    $display("\t-regfile -- we3 = %d",dut.mips.dp.rf.we3);
-    $display("\t-regfile -- wa3 = %d",dut.mips.dp.rf.wa3);
-    $display("\t-regfile -- wd3 = %d",dut.mips.dp.rf.wd3);
-    $display("\t-regfile -- rd1 = %d",dut.mips.dp.rf.rd1);
-    $display("\t-regfile -- rd2 = %d",dut.mips.dp.rf.rd2);
+    $display("\t+instr = 0x%8h",dut.instr);
+    $display("\t+op = 0b%6b",dut.mips.c.op);
+    $display("\t+controls = 0b%9b",dut.mips.c.md.controls);
+    //$display("\t+funct = 0b%6b",dut.mips.c.ad.funct);
+    $display("\t+aluop = 0b%2b",dut.mips.c.aluop);
+    //$display("\t+alucontrol = 0b%3b",dut.mips.c.ad.alucontrol);
+    $display("\t+alu result = 0x%8h",dut.mips.dp.alu.dest);
+    //TODO implement HiLO
+	//$display("\t+HiLo = 0x%8h",dut.mips.dp.alu.HiLo);
+    $display("\t+$ra = 0x%4h",dut.mips.dp.rf.rf[2]);
+    $display("\t+$im = 0x%4h",dut.mips.dp.rf.rf[3]);
+    $display("\t+$a = 0x%4h",dut.mips.dp.rf.rf[4]);
+    $display("\t+$x = 0x%4h",dut.mips.dp.rf.rf[5]);
+    $display("\t+$hi = 0x%4h",dut.mips.dp.rf.rf[6]);
+    $display("\t+$lo = 0x%4h",dut.mips.dp.rf.rf[7]);
+    $display("\t+regfile -- ra1 = %d",dut.mips.dp.rf.ra1);
+    $display("\t+regfile -- ra2 = %d",dut.mips.dp.rf.ra2);
+    $display("\t+regfile -- we3 = %d",dut.mips.dp.rf.we3);
+    $display("\t+regfile -- wa3 = %d",dut.mips.dp.rf.wa3);
+    $display("\t+regfile -- wd3 = %d",dut.mips.dp.rf.wd3);
+    $display("\t+regfile -- rd1 = %d",dut.mips.dp.rf.rd1);
+    $display("\t+regfile -- rd2 = %d",dut.mips.dp.rf.rd2);
     $display("\t+RAM[%4d] = %4d",dut.dmem.addr,dut.dmem.readdata);
     $display("writedata\tdataadr\tmemwrite");
   end
@@ -126,13 +129,13 @@ module tb_computer;
     //     firstTest = 1'b1;
     //   end
 
-    if (dut.dmem.RAM[84] === 32'h96)
+    if (dut.dmem.RAM[84] === 'h96)
       begin
         $display("Successfully wrote 0x%4h at RAM[%3d]",84,32'h0096);
         firstTest = 1'b1;
       end
     if(memwrite) begin
-      if(dataadr === 84 & writedata === 32'h96)
+      if(dataadr === 84 & writedata === 'h96)
       begin
         $display("Successfully wrote 0x%4h at RAM[%3d]",writedata,dataadr);
         firstTest = 1'b1;

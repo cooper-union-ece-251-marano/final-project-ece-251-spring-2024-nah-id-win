@@ -20,7 +20,7 @@
 `include "../datapath/datapath.sv"
 
 module cpu
-    #(parameter n = 16)(
+    #(parameter n = `WORDSIZE)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
@@ -37,18 +37,17 @@ module cpu
 
     // cpu internal components
     logic       memtoreg, alusrc, regdst, regwrite, jump, pcsrc, zero;
-    logic [3:0] alucontrol;
-    
-    controller c(instr[(31):26], instr[5:0], zero,
+	logic [n-1:0] overflow;
+
+    controller c(instr[15:11], zero,
                     memtoreg, memwrite, pcsrc,
-                    alusrc, regdst, regwrite, jump,
-                    alucontrol);
+                    alusrc, regdst, regwrite, jump);
 
     datapath dp(clk, reset, memtoreg, pcsrc,
                     alusrc, regdst, regwrite, jump,
-                    alucontrol,
+                    c.aluop,
                     zero, pc, instr,
-                    aluout, writedata, readdata);
+                    aluout, overflow, writedata, readdata);
 
 endmodule
 

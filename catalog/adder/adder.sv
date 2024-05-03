@@ -16,25 +16,20 @@
 `timescale 1ns/100ps
 
 module adder
-    #(parameter n = 16)(
+    #(parameter n = `WORDSIZE)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
 	input [n-1:0] a,
 	input [n-1:0] b,
-	input c_in,
-	input enable,
 
-	output reg c_out,
 	output reg [n-1:0] out
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-	always @(a or b or enable) begin
-		if(enable) begin
-			{c_out, out} = a + b + c_in;
-		end else {c_out, out} = 'bz;
+	always @(a or b) begin
+		out = a + b; 
 	end
 endmodule
 
