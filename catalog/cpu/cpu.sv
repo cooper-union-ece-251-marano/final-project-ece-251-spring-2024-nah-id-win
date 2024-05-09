@@ -26,11 +26,12 @@ module cpu
     //
     input  logic           clk, reset,
     input  logic [(n-1):0] instr,
-    input  logic [(n-1):0] readdata
+    input  logic [(n-1):0] readdata,
 	
+	output logic [(n-1):0] dataadr,
 	output logic [(n-1):0] pc,
     output logic           memwrite,
-    output logic [(n-1):0] aluout, writedata,
+    output logic [(n-1):0] aluout, writedata
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------

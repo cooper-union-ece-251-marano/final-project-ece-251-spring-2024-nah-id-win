@@ -30,7 +30,7 @@ module dmem
     //
     logic [(n-1):0] RAM[0:(2**r-1)];
 
-    assign readdata = RAM[addr[(n-1):2]]; // word aligned (ignores lower 2 bits of address)
+    assign readdata = RAM[addr[(n-1):1]]; // word aligned (ignores LSB of address)
 
     always @(posedge clk) // write on posedge
         if (write_enable) RAM[addr[(n-1):2]] <= writedata;

@@ -24,12 +24,12 @@ module alu
     //
 	
 	input clk,
-	input [n-1:0] src1, 	
-	input [n-1:0] src2,
+	input [(n-1):0] src1, 	
+	input [(n-1):0] src2,
 	input [c_w-1:0] aluop,
 	
-	output reg [n-1:0] dest,
-	output reg zero,
+	output reg [(n-1):0] dest,
+	output reg zero
 	//output reg [n-1:0] overflow
 );
     //
@@ -40,93 +40,45 @@ module alu
 	reg [n-1:0] Lo;
 
 
-
 	always@(posedge clk) begin
-		case (aluop)
-			'd0: begin	//ADD
-				dest = src1 + src2;
-				zero = 1'b0;
-			end
-			'd1: begin	//AND 
-				dest = src1 & src2;
-				//overflow = 'bx;
-				zero = 1'b0;
-			end
-			'd2: begin	//OR
-				dest = src1 | src2;
-				//overflow = 'bx;	
-				zero = 1'b0;		
-			end
-			'd3: begin	//XOR
-				dest = src1 ^ src2;
-				//overflow = 'bx;
-				zero = 1'b0;
-			end
-			'd4: begin	//MULT	
-				dest = src1 * src2;
-				zero = 1'b0;
-			end
-			'd5: begin	//SLL
-				dest = src1 << src2;
-				//overflow = 'bx;
-				zero = 1'b0;
-			end
-			'd6: begin	//SLR
-				dest = src1 >> src2;
-				//overflow = 'bx;
-				zero = 1'b0;
-			end
-			'd7: begin	//RST
-				dest = 'b0;
-				//overflow = 'bx;
-				zero = 1'b0;
-			end
-			'd8: begin
-				dest = 'bx;
-				//overflow = 'bx;
-				zero = (src1 == src2); //BE
-			end
-			'd9: begin 
-				dest = 'bx;
-				//overflow = 'bx;
-				zero = (src1 != src2); //BNE
-			end
-			'd10: begin
-				dest = 'bx;
-				//overflow = 'bx;
-				zero = (src1 < src2); //BL
-			end
-			'd11: begin 
-				dest = 'bx;
-				//overflow = 'bx;
-				zero = (src1 > src2); //BG
-			end
-			'd12: begin
-				dest = 'bx;
-				//overflow = 'bx;
-				zero = (src1 <= src2); //BLE
-			end
-			'd13: begin
-				dest = 'bx;
-				//overflow = 'bx;
-				zero = (src1 >= src2); //BGE
-			end
-			'd14: begin
-				dest[(n-1):(n/2)] = src1; //LIHI
-				//overflow = 'bx;
-				zero = 'b0;
-			end
-			'd15: begin
-				dest[(n/2)-1:0] = src1; //LILO
-				//overflow = 'bx;
-				zero = 'b0;
-			end
-			default: begin
-				dest = 'bx;
-				//overflow = 'bx; 
-				zero = 'b0;
-			end
-		endcase
+			case (aluop)
+				'b1000: begin //LI
+					dest <= src1 + src2;
+					zero <= 1'd0;
+				end
+				'b1001: begin //ADD
+					dest <= src1 + src2;
+					zero <= 1'd0;
+				end
+				'b1010: begin //XOR
+					dest <= src1 ^ src2;
+					zero <= 1'd0;
+				end
+				'b1011: begin //AND
+					dest <= src1 & src2;
+					zero <= 1'd0;
+				end
+				'b1100: begin //OR
+					dest <= src1 | src2;
+					zero <= 1'd0;
+				end
+				'b1101: begin //MULT
+					dest <= src1 * src2;
+					zero <= 1'd0;
+				end
+				'b1110: begin //SLL
+					dest <= src1 << src2;
+					zero <= 1'd0;
+				end
+				'b1111: begin //SLR
+					dest <= src1 >> src2;
+					zero <= 1'd0;
+				end
+				default: begin
+					dest <= {n{1'bz}};
+					zero <= 1'b0;				
+				end
+			endcase
 	end
 
 endmodule

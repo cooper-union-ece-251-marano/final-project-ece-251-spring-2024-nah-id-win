@@ -14,10 +14,11 @@
 `define IMEM
 
 `timescale 1ns/100ps
+`include "../definitions/definitions.sv"
 
 module imem
 // n=bit length of register; r=bit length of addr to limit memory and not crash your verilog emulator
-    #(parameter n = 16, parameter r = 6)(
+    #(parameter n = `WORDSIZE, parameter r = 7)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
@@ -34,7 +35,7 @@ module imem
       // read memory in hex format from file 
       // $readmemh("program_exe",RAM);
       //$readmemh("mult-prog_exe",RAM);
-      $readmemb("reddit.bin",RAM);
+      $readmemb("load_4.bin",RAM);
 	end
 
   assign readdata = RAM[addr]; // word aligned

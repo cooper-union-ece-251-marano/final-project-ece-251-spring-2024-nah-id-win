@@ -33,11 +33,11 @@ module datapath
     input  logic        alusrc, regdst,
     input  logic        regwrite, branch,
 	input  logic [(n-1):0] instr,
-    input  logic [(n-1):0] readdata
+    input  logic [(n-1):0] readdata,
 	
 	output logic        zero,
     output logic [(n-1):0] pc,
-    output logic [(n-1):0] aluout, writedata,
+    output logic [(n-1):0] aluout, writedata
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
@@ -50,7 +50,7 @@ module datapath
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 'd1, pcplus4);
+    adder       pcadd1(pc, 16'd1, pcplus4);
 	sl2         immsh(instr[11:0], signimmsh);
     adder       pcadd2(pcplus4, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
@@ -59,12 +59,14 @@ module datapath
 
     // register file logic
     regfile     rf(clk, regwrite, instr[11:8], instr[7:4], writereg, result, srca, writedata);
-	mux2 #(4)   wrmux(instr[7:4], instr[3:0], regdst, writereg);
+	mux2 #(4)   wrmux(instr[11:8], instr[3:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
 
-	signext     se(instr[7:0], signimm);
-    mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
-    alu         alu(clk, srca, srcb, aluop, aluout, zero, overflow);
+	// test: dont sign extend our imm
+	//signext     se(instr[7:0], signimm);
+	//mux2 #(n)   srcbmux(srca, signimm, alusrc, srcb);
+    mux2 #(n)   srcbmux(srca, instr[7:0], alusrc, srcb);
+	alu         alu(clk, srca, srcb, instr[15:12], aluout, zero);
 
 endmodule
 

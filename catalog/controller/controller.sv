@@ -38,7 +38,9 @@ module controller
    	//logic [3:0] aluop;
 
     // CPU main decoder
-    maindec md(op, mem2reg, memwrite, memread, alusrc, regdst, regwrite, branch);
+    maindec md(.op(op), .mem2reg(mem2reg), .memwrite(memwrite), .memread(memread), 
+	           .alusrc(alusrc), .regdst(regdst), .regwrite(regwrite), 
+			   .branch(branch));
     // CPU's ALU decoder
 	// not needed in our design -- our 4 MSBs in our opcode covers this
 	//	so we dont have an ALU decoder

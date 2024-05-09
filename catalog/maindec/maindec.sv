@@ -30,7 +30,7 @@ module maindec
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [9:0] controls; // 10-bit control vector
+    logic [6:0] controls; // 7-bit control vector
 
     // controls has 10 logical signals
     assign {regwrite, regdst, alusrc, memwrite, memread,
@@ -43,10 +43,10 @@ module maindec
             4'b0010: controls <= 7'b0000000; // JI
             4'b0011: controls <= 7'b0000001; // BE
             4'b0100: controls <= 7'b0000001; // BL
-            4'b0101: controls <= 7'b0000000; // MFHI
+            4'b1000: controls <= 7'b1010000; // LI
             4'b0110: controls <= 7'b0000000; // MFLO
 			4'b0111: controls <= 7'b1010110; // LW
-            4'b1000: controls <= 7'b0x110x0; // SW
+            4'b0101: controls <= 7'b0x110x0; // SW
             4'b1001: controls <= 7'b1100000; // ADD
             4'b1010: controls <= 7'b1100000; // XOR
             4'b1011: controls <= 7'b1100000; // AND
