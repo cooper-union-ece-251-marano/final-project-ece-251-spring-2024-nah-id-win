@@ -22,7 +22,7 @@ module maindec
     //
     input  logic [3:0] op,
     
-	output logic       mem2reg, memwrite, memread
+	output logic       mem2reg, memwrite, memread,
     output logic       alusrc,
     output logic       regdst, regwrite,
     output logic       branch
@@ -38,23 +38,23 @@ module maindec
 
     always @* begin
         case(op[3:0])
-            4'b0000: controls <= 6'b0000000; // NOOP
-            4'b0001: controls <= 6'b0000000; // JR
-            4'b0010: controls <= 6'b0000000; // JI
-            4'b0011: controls <= 6'b0000001; // BE
-            4'b0100: controls <= 6'b0000001; // BL
-            4'b0101: controls <= 6'b0000000; // MFHI
-            4'b0110: controls <= 6'b0000000; // MFLO
-			4'b0111: controls <= 6'b1010110; // LW
-            4'b1000: controls <= 6'b0x110x0; // SW
-            4'b1001: controls <= 6'b1100000; // ADD
-            4'b1010: controls <= 6'b1100000; // XOR
-            4'b1011: controls <= 6'b1100000; // AND
-            4'b1100: controls <= 6'b1100000; // OR
-            4'b1101: controls <= 6'b0000000; // MULT
-            4'b1110: controls <= 6'b1100000; // SLL
-            4'b1111: controls <= 6'b1100000; // SLR
-            default: controls <= 6'bxxxxxxx; // inavlid instruction
+            4'b0000: controls <= 7'b0000000; // NOOP
+            4'b0001: controls <= 7'b0000000; // JR
+            4'b0010: controls <= 7'b0000000; // JI
+            4'b0011: controls <= 7'b0000001; // BE
+            4'b0100: controls <= 7'b0000001; // BL
+            4'b0101: controls <= 7'b0000000; // MFHI
+            4'b0110: controls <= 7'b0000000; // MFLO
+			4'b0111: controls <= 7'b1010110; // LW
+            4'b1000: controls <= 7'b0x110x0; // SW
+            4'b1001: controls <= 7'b1100000; // ADD
+            4'b1010: controls <= 7'b1100000; // XOR
+            4'b1011: controls <= 7'b1100000; // AND
+            4'b1100: controls <= 7'b1100000; // OR
+            4'b1101: controls <= 7'b0000000; // MULT
+            4'b1110: controls <= 7'b1100000; // SLL
+            4'b1111: controls <= 7'b1100000; // SLR
+            default: controls <= 7'bxxxxxxx; // inavlid instruction
         endcase
     end
 
