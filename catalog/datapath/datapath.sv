@@ -31,18 +31,18 @@ module datapath
     input  logic        clk, reset,
     input  logic        memtoreg, pcsrc,
     input  logic        alusrc, regdst,
-    input  logic        regwrite, jump,
-    input  logic [3:0]  aluop,
-    output logic        zero,
-    output logic [(n-1):0] pc,
-    input  logic [(n-1):0] instr,
-    output logic [(n-1):0] aluout, overflow, writedata,
+    input  logic        regwrite, branch,
+	input  logic [(n-1):0] instr,
     input  logic [(n-1):0] readdata
+	
+	output logic        zero,
+    output logic [(n-1):0] pc,
+    output logic [(n-1):0] aluout, writedata,
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [2:0] writereg;
+    logic [3:0] writereg;
     logic [(n-1):0] pcnext, pcnextbr, pcplus4, pcbranch;
     logic [(n-1):0] signimm, signimmsh;
     logic [(n-1):0] srca, srcb;
@@ -50,20 +50,19 @@ module datapath
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 16'b10, pcplus4);
-	sl2         immsh(signimm, signimmsh);
+    adder       pcadd1(pc, 'd1, pcplus4);
+	sl2         immsh(instr[11:0], signimmsh);
     adder       pcadd2(pcplus4, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
-    mux2 #(n)   pcmux(pcnextbr, {pcplus4[15:12], instr[11:0]}, jump, pcnext);
+	// jump instr?
+    mux2 #(n)   pcmux(pcnextbr, {pcplus4[15:12], instr[11:0]}, branch, pcnext);
 
     // register file logic
-    regfile     rf(clk, regwrite, instr[8:6], instr[5:3], writereg, result, srca, writedata);
-    // switched between rd and our imm
-	mux2 #(3)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
+    regfile     rf(clk, regwrite, instr[11:8], instr[7:4], writereg, result, srca, writedata);
+	mux2 #(4)   wrmux(instr[7:4], instr[3:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
-    signext     se(instr[7:0], signimm);
 
-    // ALU logic
+	signext     se(instr[7:0], signimm);
     mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
     alu         alu(clk, srca, srcb, aluop, aluout, zero, overflow);
 
