@@ -65,7 +65,7 @@ module datapath
 	// test: dont sign extend our imm
 	//signext     se(instr[7:0], signimm);
 	//mux2 #(n)   srcbmux(srca, signimm, alusrc, srcb);
-    mux2 #(n)   srcbmux(srca, instr[7:0], alusrc, srcb);
+    mux2 #(n)   srcbmux(writedata, instr[7:0], alusrc, srcb);
 	alu         alu(clk, srca, srcb, instr[15:12], aluout, zero);
 
 endmodule
