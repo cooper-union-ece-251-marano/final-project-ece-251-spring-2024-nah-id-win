@@ -139,6 +139,7 @@ def main() -> None:
         lines = inFile.readlines()
     with open(outFileName, 'w') as outFile:
         for line in lines:
+            print("PROCESSING: {}".format(line))
             if line[0] == '#' or line == '\n':
                 if verbose:
                     print(line.strip())

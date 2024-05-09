@@ -24,7 +24,7 @@
 `include "../signext/signext.sv"
 
 module datapath
-    #(parameter n = 16)(
+    #(parameter n = `WORDSIZE)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
@@ -51,14 +51,15 @@ module datapath
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
     adder       pcadd1(pc, 16'b10, pcplus4);
-    sl2         immsh(signimm, signimmsh);
+	sl2         immsh(signimm, signimmsh);
     adder       pcadd2(pcplus4, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
     mux2 #(n)   pcmux(pcnextbr, {pcplus4[15:12], instr[11:0]}, jump, pcnext);
 
     // register file logic
     regfile     rf(clk, regwrite, instr[8:6], instr[5:3], writereg, result, srca, writedata);
-    mux2 #(3)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
+    // switched between rd and our imm
+	mux2 #(3)   wrmux(instr[5:3], instr[2:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
     signext     se(instr[7:0], signimm);
 

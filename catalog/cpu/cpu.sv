@@ -25,29 +25,34 @@ module cpu
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic           clk, reset,
-    output logic [(n-1):0] pc,
     input  logic [(n-1):0] instr,
+    input  logic [(n-1):0] readdata
+	
+	output logic [(n-1):0] pc,
     output logic           memwrite,
     output logic [(n-1):0] aluout, writedata,
-    input  logic [(n-1):0] readdata
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
 
     // cpu internal components
-    logic       memtoreg, alusrc, regdst, regwrite, jump, pcsrc, zero;
-	logic [n-1:0] overflow;
+    logic       memtoreg, alusrc, regdst, regwrite, branch, zero, pcsrc;
+	//logic [n-1:0] overflow;
 
-    controller c(instr[15:11], zero,
-                    memtoreg, memwrite, pcsrc,
-                    alusrc, regdst, regwrite, jump);
+	
+	//ctrl in: instr, zero
+	//out: regdst, branch, memread, mem2reg, memwrite, alusrc, regwrite, pcsrc 
+    controller c(instr[15:12], zero,
+                    memtoreg, memwrite, memread,
+                    alusrc, regdst, regwrite, branch, pcsrc);
 
+	//dp in: clk, reset, inst, ALL ctrl signals
+	//dp out: 
     datapath dp(clk, reset, memtoreg, pcsrc,
-                    alusrc, regdst, regwrite, jump,
-                    c.aluop,
-                    zero, pc, instr,
-                    aluout, overflow, writedata, readdata);
+                    alusrc, regdst, regwrite, branch,
+                    instr, readdata, zero, pc,
+                    aluout, writedata);
 
 endmodule
 

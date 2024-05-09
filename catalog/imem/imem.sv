@@ -33,8 +33,9 @@ module imem
     begin
       // read memory in hex format from file 
       // $readmemh("program_exe",RAM);
-      $readmemh("mult-prog_exe",RAM);
-    end
+      //$readmemh("mult-prog_exe",RAM);
+      $readmemb("reddit.bin",RAM);
+	end
 
   assign readdata = RAM[addr]; // word aligned
 

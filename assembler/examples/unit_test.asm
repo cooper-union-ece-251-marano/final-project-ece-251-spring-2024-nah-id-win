@@ -6,23 +6,21 @@ BL $a, $x, 100
 BG $a, $x, 100
 BLE $a, $x, 100
 BGE $a, $x, 100
-HALT 0x10
 LIHI 0b20
 LILO -100
 INC $a
 DEC $a
 RST $hi
 ADD $lo, $a, $x
-LWOFF $a, $x, $lo
-SWOFF $a, $x, $lo
+LWOFF $a, $x, 7
+SWOFF $a, $x, 7
 XOR $lo, $a, $x
 AND $lo, $a, $x
 OR $lo, $a, $x
-SET $lo, $hi
+SETI $lo, 1
 MULT $a, $x
 MFHI $lo
 MFLO $lo
-OUT $a
 SLL $lo, $a, $x
 SLR $lo, $a, $x
 ADDI $lo, $hi, 4000

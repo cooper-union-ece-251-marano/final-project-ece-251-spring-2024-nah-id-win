@@ -30,95 +30,100 @@ module alu
 	
 	output reg [n-1:0] dest,
 	output reg zero,
-	output reg [n-1:0] overflow
+	//output reg [n-1:0] overflow
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
 
+	reg [n-1:0] Hi;
+	reg [n-1:0] Lo;
+
+
+
 	always@(posedge clk) begin
 		case (aluop)
 			'd0: begin	//ADD
-				{overflow, dest} = src1 + src2;
+				dest = src1 + src2;
 				zero = 1'b0;
 			end
 			'd1: begin	//AND 
 				dest = src1 & src2;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = 1'b0;
 			end
 			'd2: begin	//OR
 				dest = src1 | src2;
-				overflow = 'bx;	
+				//overflow = 'bx;	
 				zero = 1'b0;		
 			end
 			'd3: begin	//XOR
 				dest = src1 ^ src2;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = 1'b0;
 			end
 			'd4: begin	//MULT	
-				{overflow, dest} = src1 * src2;
+				dest = src1 * src2;
 				zero = 1'b0;
 			end
 			'd5: begin	//SLL
 				dest = src1 << src2;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = 1'b0;
 			end
 			'd6: begin	//SLR
 				dest = src1 >> src2;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = 1'b0;
 			end
 			'd7: begin	//RST
 				dest = 'b0;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = 1'b0;
 			end
 			'd8: begin
 				dest = 'bx;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = (src1 == src2); //BE
 			end
 			'd9: begin 
 				dest = 'bx;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = (src1 != src2); //BNE
 			end
 			'd10: begin
 				dest = 'bx;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = (src1 < src2); //BL
 			end
 			'd11: begin 
 				dest = 'bx;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = (src1 > src2); //BG
 			end
 			'd12: begin
 				dest = 'bx;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = (src1 <= src2); //BLE
 			end
 			'd13: begin
 				dest = 'bx;
-				overflow = 'bx;
+				//overflow = 'bx;
 				zero = (src1 >= src2); //BGE
 			end
 			'd14: begin
-				dest[(n/2)-1:0] = src1; //LIHI
-				overflow = 'bx;
+				dest[(n-1):(n/2)] = src1; //LIHI
+				//overflow = 'bx;
 				zero = 'b0;
 			end
 			'd15: begin
-				dest[n-1:(n/2)] = src1; //LILO
-				overflow = 'bx;
+				dest[(n/2)-1:0] = src1; //LILO
+				//overflow = 'bx;
 				zero = 'b0;
 			end
 			default: begin
 				dest = 'bx;
-				overflow = 'bx; 
+				//overflow = 'bx; 
 				zero = 'b0;
 			end
 		endcase

@@ -17,6 +17,8 @@
 `include "alu.sv"
 `include "../definitions/definitions.sv"
 
+`include "../clock/clock.sv"
+
 module tb_alu;
     parameter n = `WORDSIZE;
 	parameter c_w = `CW;
@@ -31,12 +33,17 @@ module tb_alu;
 	wire ZERO;
 	wire [n-1:0] OVERFLOW;
 
+	logic clock_enable;
+
+	clock clk(clock_enable, clk_out);
+
 	integer i;
 
 	initial begin: init_vars
 		ALUOP = 4'b0000;
-		SRC1 = 'd12;
+		SRC1 = 'd22;
 		SRC2 = 'd10;
+		clock_enable = 0;
 	end
 	initial begin
 	    $dumpfile("tb_sll.vcd"); // for Makefile, make dump file same as module name
@@ -45,19 +52,22 @@ module tb_alu;
 	
 	// display some info during simulation
 	initial begin
-	    $monitor ($time,"ns, aluop=%b, src1=%b, src2=%b, dest=%b, zero=%b, of=%b",ALUOP,SRC1,SRC2,DEST,ZERO,OVERFLOW);
+	    $monitor ($time,"ns, clk=%b, aluop=%b, src1=%b, src2=%b, dest=%b, zero=%b, of=%b",clk_out, ALUOP,SRC1,SRC2,DEST,ZERO,OVERFLOW);
 	end
 	
 	initial begin: apply_stimulus
-		for(i = 0; i < 16; i = i+1) begin
-			#10 ALUOP = i;
-		end
+		#10
+		#10 clock_enable = 1;
+		for(i = 0; i < 16; i = i + 1) begin
+			#5 ALUOP = i;
+			#5;
+		end	
 		$finish;
 	end
 
 //
 // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
 //
-alu uut(.aluop(ALUOP), .src1(SRC1), .src2(SRC2), .dest(DEST), .zero(ZERO), .overflow(OVERFLOW));
+alu uut(.clk(clk_out), .aluop(ALUOP), .src1(SRC1), .src2(SRC2), .dest(DEST), .zero(ZERO), .overflow(OVERFLOW));
 endmodule
 `endif // TB_ALU

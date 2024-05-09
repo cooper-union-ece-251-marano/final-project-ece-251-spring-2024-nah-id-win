@@ -20,45 +20,41 @@ module maindec
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
-    input  logic [4:0] op,
-    output logic       memtoreg, memwrite,
-    output logic       branch,
+    input  logic [3:0] op,
+    
+	output logic       mem2reg, memwrite, memread
+    output logic       alusrc,
     output logic       regdst, regwrite,
-    output logic       jump,
-    output logic [3:0] aluop
+    output logic       branch
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [8:0] controls; // 9-bit control vector
+    logic [9:0] controls; // 10-bit control vector
 
-    // controls has 9 logical signals
-    assign {regwrite, regdst, branch, memwrite,
-            memtoreg, jump, aluop} = controls;
+    // controls has 10 logical signals
+    assign {regwrite, regdst, alusrc, memwrite, memread,
+            mem2reg, branch} = controls;
 
     always @* begin
-        case(op[4:0])
-            5'b00000: controls <= 10'b0000000000; // NOOP
-            5'b00001: controls <= 10'b0000010000; // JR
-            5'b00010: controls <= 10'b0010001001; // BNE
-            5'b00011: controls <= 10'b0010001000; // BE
-            5'b00100: controls <= 10'b0010001010; // BL
-            5'b00101: controls <= 10'b0010001011; // BG
-            5'b00110: controls <= 10'b0010001100; // BLE
-            5'b00111: controls <= 10'b0010001101; // BGE
-            5'b01001: controls <= 10'b0000001110; // LIHI
-            5'b01010: controls <= 10'b0000001111; // LILO
-            5'b01110: controls <= 10'b1000100000; // LW
-            5'b01111: controls <= 10'b0001000000; // SW
-            5'b10010: controls <= 10'b1000000111; // RST
-            5'b10011: controls <= 10'b1100000000; // ADD
-            5'b10110: controls <= 10'b1100000011; // XOR
-            5'b10111: controls <= 10'b1100000001; // AND
-            5'b11000: controls <= 10'b1100000010; // OR
-            5'b11010: controls <= 10'b1000000100; // MULT
-            5'b11110: controls <= 10'b1100000101; // SLL
-            5'b11111: controls <= 10'b1100000110; // SLR
-            default: controls <= 10'bxxxxxxxxxx; // inavlid instruction
+        case(op[3:0])
+            4'b0000: controls <= 6'b0000000; // NOOP
+            4'b0001: controls <= 6'b0000000; // JR
+            4'b0010: controls <= 6'b0000000; // JI
+            4'b0011: controls <= 6'b0000001; // BE
+            4'b0100: controls <= 6'b0000001; // BL
+            4'b0101: controls <= 6'b0000000; // MFHI
+            4'b0110: controls <= 6'b0000000; // MFLO
+			4'b0111: controls <= 6'b1010110; // LW
+            4'b1000: controls <= 6'b0x110x0; // SW
+            4'b1001: controls <= 6'b1100000; // ADD
+            4'b1010: controls <= 6'b1100000; // XOR
+            4'b1011: controls <= 6'b1100000; // AND
+            4'b1100: controls <= 6'b1100000; // OR
+            4'b1101: controls <= 6'b0000000; // MULT
+            4'b1110: controls <= 6'b1100000; // SLL
+            4'b1111: controls <= 6'b1100000; // SLR
+            default: controls <= 6'bxxxxxxx; // inavlid instruction
         endcase
     end
 
