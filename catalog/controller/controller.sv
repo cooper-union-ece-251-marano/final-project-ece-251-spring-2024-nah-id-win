@@ -26,7 +26,7 @@ module controller
     input  logic [3:0] op,
     input  logic       zero,
 	
-	output logic       mem2reg, memwrite, memread
+	output logic       mem2reg, memwrite, memread,
     output logic       alusrc,
     output logic       regdst, regwrite,
     output logic       branch,
@@ -35,7 +35,6 @@ module controller
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic       branch;
    	//logic [3:0] aluop;
 
     // CPU main decoder
