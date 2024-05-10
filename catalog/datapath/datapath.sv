@@ -50,7 +50,7 @@ module datapath
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 16'd1, pcplus4);
+    adder       pcadd1(pc, 16'd2, pcplus4);
 	sl2         immsh(instr[11:0], signimmsh);
     adder       pcadd2(pcplus4, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
