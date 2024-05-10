@@ -30,7 +30,7 @@ module controller
     output logic       alusrc,
     output logic       regdst, regwrite,
     output logic       branch,
-	output logic       pcsrc
+	output logic       pcsrc, jump
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
@@ -40,7 +40,7 @@ module controller
     // CPU main decoder
     maindec md(.op(op), .mem2reg(mem2reg), .memwrite(memwrite), .memread(memread), 
 	           .alusrc(alusrc), .regdst(regdst), .regwrite(regwrite), 
-			   .branch(branch));
+			   .branch(branch), .jumpr(jump));
     // CPU's ALU decoder
 	// not needed in our design -- our 4 MSBs in our opcode covers this
 	//	so we dont have an ALU decoder

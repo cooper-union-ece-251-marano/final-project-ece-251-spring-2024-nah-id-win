@@ -37,25 +37,25 @@ module datapath
 	
 	output logic        zero,
     output logic [(n-1):0] pc,
-    output logic [(n-1):0] aluout, writedata
+    output logic [(n-1):0] aluout, writedata,
+
+    input  logic        jump
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
     logic [3:0] writereg;
-    logic [(n-1):0] pcnext, pcnextbr, pcplus4, pcbranch;
+    logic [(n-1):0] pcnext, pcnextbr, pcplus1, pcbranch;
     logic [(n-1):0] signimm, signimmsh;
     logic [(n-1):0] srca, srcb;
     logic [(n-1):0] result;
 
     // "next PC" logic
-    dff #(n)    pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 16'd1, pcplus4);
-	sl2         immsh(instr[11:0], signimmsh);
-    adder       pcadd2(pcplus4, signimmsh, pcbranch);
-    mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
-	// jump instr?
-    mux2 #(n)   pcmux(pcnextbr, {pcplus4[15:12], instr[11:0]}, branch, pcnext);
+    dff #(n)    pcreg(clk, reset, pcnext, pc); // pc = pcnext (on end of cycle)
+    adder       pcadd1(pc, 16'b1, pcplus1); // pcplus1 = pc + 1
+    adder       pcaddbranch(pcplus1, {4'b0, instr[11:0]}, pcbranch); // pcbranch = pcplus1 + {4'b0, 12'b(imm)}
+    mux2 #(n)   pcbrmux(pcplus1, pcbranch, pcsrc, pcnextbr); // pcnextbr = pcsrc == 0 ? pcplus1 : pcbranch
+    mux2 #(n)   pcjrmux(pcnextbr, aluout, jump, pcnext); // pcnext = jump == 0 ? aluout : pcnextbr
 
     // register file logic
     regfile     rf(clk, regwrite, instr[11:8], instr[7:4], writereg, result, srca, writedata);
@@ -63,9 +63,9 @@ module datapath
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
 
 	// test: dont sign extend our imm
-	//signext     se(instr[7:0], signimm);
-	//mux2 #(n)   srcbmux(srca, signimm, alusrc, srcb);
-    mux2 #(n)   srcbmux(writedata, instr[7:0], alusrc, srcb);
+	signext     se(instr[7:0], signimm);
+	// mux2 #(n)   srcbmux(srca, signimm, alusrc, srcb);
+    mux2 #(n)   srcbmux(writedata, signimm, alusrc, srcb);
 	alu         alu(clk, srca, srcb, instr[15:12], aluout, zero);
 
 endmodule

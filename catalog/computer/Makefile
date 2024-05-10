@@ -17,7 +17,7 @@ COMPONENT = computer
 SRC = $(wildcard *.sv)
 SIM_ARGS=+a=3 +b=2 +s=0
 TBOUTPUT = $(COMPONENT).vcd	# THIS NEEDS TO MATCH THE OUTPUT FILE
-									# FROM YOUR TESTBENCH
+# FROM YOUR TESTBENCH
 ###############################################################################
 # BE CAREFUL WHEN CHANGING ITEMS BELOW THIS LINE
 ###############################################################################
