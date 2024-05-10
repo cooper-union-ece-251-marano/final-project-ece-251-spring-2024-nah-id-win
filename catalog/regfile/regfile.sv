@@ -47,9 +47,11 @@ module regfile
     // note: for pipelined processor, write third port
     // on falling edge of clk
 
-    always @(posedge clk) begin
+    always @(negedge clk) begin
         if (we3) begin
-            rf[wa3] <= wd3;
+            if (wa3 != 0) begin
+                rf[wa3] <= wd3;
+            end
         end
     end
 
