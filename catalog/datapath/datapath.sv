@@ -49,16 +49,17 @@ module datapath
     logic [(n-1):0] signimm, signimmsh;
     logic [(n-1):0] srca, srcb;
     logic [(n-1):0] result;
+    logic [(n-1):0] rd3; // reg[ins[3:0]]
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc); // pc = pcnext (on end of cycle)
     adder       pcadd1(pc, 16'b1, pcplus1); // pcplus1 = pc + 1
-    adder       pcaddbranch(pcplus1, {4'b0, instr[11:0]}, pcbranch); // pcbranch = pcplus1 + {4'b0, 12'b(imm)}
+    adder       pcaddbranch(pcplus1, rd3, pcbranch); // pcbranch = pcplus1 + reg[ins[3:0]]
     mux2 #(n)   pcbrmux(pcplus1, pcbranch, pcsrc, pcnextbr); // pcnextbr = pcsrc == 0 ? pcplus1 : pcbranch
     mux2 #(n)   pcjrmux(pcnextbr, aluout, jump, pcnext); // pcnext = jump == 0 ? aluout : pcnextbr
 
     // register file logic
-    regfile     rf(clk, regwrite, instr[11:8], instr[7:4], writereg, result, srca, writedata);
+    regfile     rf(clk, regwrite, instr[11:8], instr[7:4], writereg, result, srca, writedata, rd3);
 	mux2 #(4)   wrmux(instr[11:8], instr[3:0], regdst, writereg);
     mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
 

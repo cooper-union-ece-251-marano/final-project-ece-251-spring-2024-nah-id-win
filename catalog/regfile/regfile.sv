@@ -26,7 +26,7 @@ module regfile
     input  logic        we3, 
     input  logic [(r-1):0] ra1, ra2, wa3, 
 	input  logic [(n-1):0] wd3, 
-    output logic [(n-1):0] rd1, rd2
+    output logic [(n-1):0] rd1, rd2, rd3
     );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
@@ -52,6 +52,7 @@ module regfile
 
     assign rd1 = (ra1 != 0) ? rf[ra1] : 0;
     assign rd2 = (ra2 != 0) ? rf[ra2] : 0;
+    assign rd3 = (wa3 != 0) ? rf[wa3] : 0;
 endmodule
 
 `endif // REGFILE
