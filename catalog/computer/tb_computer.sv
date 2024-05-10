@@ -57,7 +57,7 @@ module tb_computer;
   // initialize test
   initial begin
     #0 clk_enable <= 0; #50 reset <= 1; # 50; reset <= 0; #50 clk_enable <= 1;
-    #150 $finish;
+    #400 $finish;
   end
 
   // monitor what happens at posedge of clock transition
@@ -74,7 +74,7 @@ module tb_computer;
       //TODO implement HiLO
 	  //$display(" +HiLo = 0x%8h",dut.mips.dp.alu.HiLo);
 	  
-	  $display(" +$pc = 0x%4h",dut.mips.dp.rf.rf[1]);
+	  $display(" +$pc = 0x%4h",dut.pc);
 	  $display(" +$sp = 0x%4h",dut.mips.dp.rf.rf[2]);
       $display(" +$im = 0x%4h",dut.mips.dp.rf.rf[3]);
       $display(" +$ra = 0x%4h",dut.mips.dp.rf.rf[4]);
@@ -115,7 +115,7 @@ module tb_computer;
     //TODO implement HiLO
     //$display(" +HiLo = 0x%8h",dut.mips.dp.alu.HiLo);
     
-    $display(" +$pc = 0x%4h",dut.mips.dp.rf.rf[1]);
+    $display(" +$pc = 0x%4h",dut.pc);
     $display(" +$sp = 0x%4h",dut.mips.dp.rf.rf[2]);
     $display(" +$im = 0x%4h",dut.mips.dp.rf.rf[3]);
     $display(" +$ra = 0x%4h",dut.mips.dp.rf.rf[4]);
