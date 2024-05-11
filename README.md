@@ -1,13 +1,14 @@
 # "Nah, I'd Win" CPU ISA
 ## A MIPS-like architecture <br> ECE-251 Computer Architecture Final Project, led by Prof. Rob Marano <br> written by evan rosenfeld and james ryan  
 
-**Please See `tex/bin/NahIdWinGreenSheet.pdf` for detailed info on our ISA**  
+**Please See `pdf/bin/NahIdWinGreenSheet.pdf` for detailed info on our ISA**  
 
 # What's Provided
 1. Our ISA
     - under `catalog/computer` are various test programs for the user to load  
    onto our ISA, just specify the file name in the Instruction Memory module  
-   (under `catalog/imem/imem.sv`  
+   (under `catalog/imem/imem.sv`), and then run `make` in the `catalog/computer/`  
+   directory.  
     - We provide a sample Fibonnaci program, `catalog/computer/fib/fib.asm`  
     which can be assembled using our assembler (under `assembler/`).  
     We provide a pre-assembled copy under `catalog/computer/fib/fib.bin`, along  
