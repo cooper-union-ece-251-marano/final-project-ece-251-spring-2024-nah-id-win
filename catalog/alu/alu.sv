@@ -42,36 +42,40 @@ module alu
 
 	always@(posedge clk) begin
 			case (aluop)
-				'b1000: begin //LI
+				4'b1000: begin //LI
 					dest <= src1 + src2;
-					zero <= 1'd0;
+					zero <= 1'b0;
 				end
-				'b1001: begin //ADD
+				4'b1001: begin //ADD
 					dest <= src1 + src2;
-					zero <= 1'd0;
+					zero <= src1 == src2 ? 1'b1 : 1'b0;
 				end
-				'b1010: begin //XOR
+				4'b1010: begin //XOR
 					dest <= src1 ^ src2;
-					zero <= 1'd0;
+					zero <= src1 == src2 ? 1'b1 : 1'b0;
 				end
-				'b1011: begin //AND
+				4'b1011: begin //AND
 					dest <= src1 & src2;
-					zero <= 1'd0;
+					zero <= src1 == src2 ? 1'b1 : 1'b0;
 				end
-				'b1100: begin //OR
+				4'b1100: begin //OR
 					dest <= src1 | src2;
-					zero <= 1'd0;
+					zero <= src1 == src2 ? 1'b1 : 1'b0;
 				end
-				'b1101: begin //MULT
+				4'b1101: begin //MULT
 					dest <= src1 * src2;
-					zero <= 1'd0;
+					zero <= src1 == src2 ? 1'b1 : 1'b0;
 				end
-				'b1110: begin //SLL
+				4'b1110: begin //SLL
 					dest <= src1 << src2;
-					zero <= 1'd0;
+					zero <= src1 == src2 ? 1'b1 : 1'b0;
 				end
-				'b1111: begin //SLR
+				4'b1111: begin //SLR
 					dest <= src1 >> src2;
+					zero <= src1 == src2 ? 1'b1 : 1'b0;
+				end
+				4'b0001: begin //JR
+					dest <= src1;
 					zero <= 1'd0;
 				end
 				default: begin

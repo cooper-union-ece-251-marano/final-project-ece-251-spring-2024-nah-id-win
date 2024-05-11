@@ -38,7 +38,7 @@ module cpu
     //
 
     // cpu internal components
-    logic       memtoreg, alusrc, regdst, regwrite, branch, zero, pcsrc;
+    logic       memtoreg, alusrc, regdst, regwrite, branch, zero, pcsrc, jump;
 	//logic [n-1:0] overflow;
 
 	
@@ -46,14 +46,15 @@ module cpu
 	//out: regdst, branch, memread, mem2reg, memwrite, alusrc, regwrite, pcsrc 
     controller c(instr[15:12], zero,
                     memtoreg, memwrite, memread,
-                    alusrc, regdst, regwrite, branch, pcsrc);
+                    alusrc, regdst, regwrite, 
+                    branch, pcsrc, jump);
 
 	//dp in: clk, reset, inst, ALL ctrl signals
 	//dp out: 
     datapath dp(clk, reset, memtoreg, pcsrc,
                     alusrc, regdst, regwrite, branch,
                     instr, readdata, zero, pc,
-                    aluout, writedata);
+                    aluout, writedata, jump);
 
 endmodule
 
