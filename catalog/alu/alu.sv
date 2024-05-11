@@ -79,7 +79,7 @@ module alu
 					zero <= src1 == src2 ? 1'b1 : 1'b0;
 				end
 				4'b0011: begin //BE
-					dest <= {15'b0, src1 == src2 ? 1'b1 : 1'b0};
+					dest <= {15'b0, ((src1 == src2) ? 1'b1 : 1'b0)};
 					zero <= src1 == src2 ? 1'b1 : 1'b0;
 				end
 				default: begin

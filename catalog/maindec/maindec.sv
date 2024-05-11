@@ -41,7 +41,7 @@ module maindec
         case(op[3:0])
             4'b0000: controls <= 8'b00000000; // NOOP
             4'b0001: controls <= 8'b01000001; // JR
-            4'b0011: controls <= 8'b00000010; // BE
+            4'b0011: controls <= 8'b10000010; // BE
             4'b1000: controls <= 8'b10100000; // LI
             4'b0110: controls <= 8'b00000000; // MFLO
 			4'b0111: controls <= 8'b10101100; // LW
