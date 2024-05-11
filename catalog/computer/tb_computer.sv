@@ -47,7 +47,7 @@ module tb_computer;
     firstTest = 1'b0;
     secondTest = 1'b0;
     $dumpfile("tb_computer.vcd");
-    $dumpvars(0,dut1,clk,reset,writedata,dataadr,memwrite);
+    $dumpvars(0,dut1,clk,reset,writedata,dataadr,memwrite,dut.mips.dp.rf.rf[7]);
     $monitor("t=%t 0x%7h %7d %8d",$realtime,writedata,dataadr,memwrite);
     // $dumpvars(0,clk,a,b,ctrl,result,zero,negative,carryOut,overflow);
     // $display("Ctl Z  N  O  C  A                    B                    ALUresult");

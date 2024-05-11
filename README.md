@@ -1,7 +1,5 @@
 # "Nah, I'd Win" CPU ISA
-## A MIPS-like architecture
-## ECE-251 Computer Architecture Final Project, led by Prof. Rob Marano
-## written by evan rosenfeld and james ryan  
+## A MIPS-like architecture <br> ECE-251 Computer Architecture Final Project, led by Prof. Rob Marano <br> written by evan rosenfeld and james ryan  
 
 **Please See `tex/bin/NahIdWinGreenSheet.pdf` for detailed info on our ISA**  
 
@@ -21,3 +19,4 @@
     canonical instruction names.  
 3. A demo!
     - A demo video can be found [here!](https://www.youtube.com)
+    - Other goodies (like our fib waveforms) can be seen under `goodies/`
