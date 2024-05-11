@@ -1,4 +1,4 @@
-### "Nah, I'd WIn" CPU ISA
+# "Nah, I'd WIn" CPU ISA
 ## ECE-251 Computer Architecture Final Project, led by Prof. Rob Marano
 ## written by evan rosenfeld and james ryan  
 
