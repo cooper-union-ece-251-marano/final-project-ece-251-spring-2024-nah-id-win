@@ -1,4 +1,5 @@
-# "Nah, I'd WIn" CPU ISA
+# "Nah, I'd Win" CPU ISA
+## A MIPS-like architecture
 ## ECE-251 Computer Architecture Final Project, led by Prof. Rob Marano
 ## written by evan rosenfeld and james ryan  
 
