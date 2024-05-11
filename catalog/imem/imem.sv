@@ -36,7 +36,7 @@ module imem
       // $readmemh("program_exe",RAM);
       //$readmemh("mult-prog_exe",RAM);
       //$readmemb("program.bin",RAM);
-	  $readmemb("load_4.bin",RAM);
+	  $readmemb("branch_test.bin",RAM);
 	end
 
   assign readdata = RAM[addr]; // word aligned

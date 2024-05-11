@@ -29,7 +29,7 @@ module datapath
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic        clk, reset,
-    input  logic        memtoreg, pcsrc,
+    input  logic        memtoreg,
     input  logic        alusrc, regdst,
     input  logic        regwrite, branch,
 	input  logic [(n-1):0] instr,
@@ -49,14 +49,18 @@ module datapath
     logic [(n-1):0] signimm, signimmsh;
     logic [(n-1):0] srca, srcb;
     logic [(n-1):0] result;
+    logic [(n-1):0] branchextended;
+    logic branchcheck;
+
+    assign branchcheck = branch & aluout[0];
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc); // pc = pcnext (on end of cycle)
     adder       pcadd1(pc, 16'b1, pcplus1); // pcplus1 = pc + 1
-    adder       pcaddbranch(pcplus1, rd3, pcbranch); // pcbranch = pcplus1 + reg[ins[3:0]]
-    mux2 #(n)   pcbrmux(pcplus1, pcbranch, pcsrc, pcnextbr); // pcnextbr = pcsrc == 0 ? pcplus1 : pcbranch
+    // signext #(n, 4)    brext(instr[3:0], branchextended);
+    adder       pcaddbranch(pcplus1, {12'b0, instr[3:0]}, pcbranch); // pcbranch = pcplus1 + reg[ins[3:0]]
+    mux2 #(n)   pcbrmux(pcplus1, pcbranch, branchcheck, pcnextbr); // pcnextbr = pcsrc == 0 ? pcplus1 : pcbranch
     mux2 #(n)   pcjrmux(pcnextbr, srca, jump, pcnext); // pcnext = jump == 0 ? reg[ins[11:8]] : pcnextbr
-    // mux2 #(n)   pcjrmux(pcplus1, srca, jump, pcnext);
 
     // register file logic
     regfile     rf(clk, regwrite, instr[11:8], instr[7:4], writereg, result, srca, writedata);

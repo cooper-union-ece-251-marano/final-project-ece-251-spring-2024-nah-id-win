@@ -41,17 +41,16 @@ module cpu
     logic       memtoreg, alusrc, regdst, regwrite, branch, zero, pcsrc, jump;
 	//logic [n-1:0] overflow;
 
-	
 	//ctrl in: instr, zero
 	//out: regdst, branch, memread, mem2reg, memwrite, alusrc, regwrite, pcsrc 
-    controller c(instr[15:12], zero,
+    controller c(instr[15:12],
                     memtoreg, memwrite, memread,
                     alusrc, regdst, regwrite, 
-                    branch, pcsrc, jump);
+                    branch, jump);
 
 	//dp in: clk, reset, inst, ALL ctrl signals
 	//dp out: 
-    datapath dp(clk, reset, memtoreg, pcsrc,
+    datapath dp(clk, reset, memtoreg,
                     alusrc, regdst, regwrite, branch,
                     instr, readdata, zero, pc,
                     aluout, writedata, jump);

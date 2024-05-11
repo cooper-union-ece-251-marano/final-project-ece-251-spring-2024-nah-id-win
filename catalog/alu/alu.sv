@@ -43,7 +43,7 @@ module alu
 	always@(posedge clk) begin
 			case (aluop)
 				4'b1000: begin //LI
-					dest <= src1 + src2;
+					dest <= src2;
 					zero <= 1'b0;
 				end
 				4'b1001: begin //ADD
@@ -76,7 +76,11 @@ module alu
 				end
 				4'b0001: begin //JR
 					dest <= src1;
-					zero <= 1'd0;
+					zero <= src1 == src2 ? 1'b1 : 1'b0;
+				end
+				4'b0011: begin //BE
+					dest <= {15'b0, src1 == src2 ? 1'b1 : 1'b0};
+					zero <= src1 == src2 ? 1'b1 : 1'b0;
 				end
 				default: begin
 					dest <= {n{1'bz}};
