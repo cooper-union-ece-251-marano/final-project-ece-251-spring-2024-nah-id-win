@@ -52,7 +52,7 @@ module datapath
     logic [(n-1):0] branchextended;
     logic branchcheck;
 
-    assign branchcheck = branch & aluout[0];
+    assign branchcheck = (branch & aluout[0]);
 
     // "next PC" logic
     dff #(n)    pcreg(clk, reset, pcnext, pc); // pc = pcnext (on end of cycle)
