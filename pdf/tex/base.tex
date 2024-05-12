@@ -1,0 +1,71 @@
+\section*{"Nah, I'd Win" 16-bit Instruction Set}
+
+\subsection*{Core Instruction Formats}
+\small
+\begin{center}
+\begin{tabular}
+{p{0in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}l}
+
+&
+\instbit{15} &
+\instbit{14} &
+\instbit{13} &
+\multicolumn{1}{c}{\instbit{12}} &
+\instbit{11} &
+\instbit{10} &
+\instbit{9} &
+\instbit{8} &
+\instbit{7} &
+\instbit{6} &
+\instbit{5} &
+\instbit{4} &
+\instbit{3} &
+\instbit{2} &
+\instbit{1} &
+\instbit{0} \\
+\cline{2-17}
+
+&
+\multicolumn{4}{|c|}{op} &
+\multicolumn{4}{c|}{src1} &
+\multicolumn{4}{c|}{src2} &
+\multicolumn{4}{c|}{dest} &
+R Type \\
+\cline{2-17}
+
+&
+\multicolumn{4}{|c|}{op} &
+\multicolumn{4}{c|}{dest/src1} &
+\multicolumn{8}{c|}{immediate} &
+I / J Type \\
+\cline{2-17}
+
+\end{tabular}
+\end{center}
+
+\subsection*{Base Integer Instructions}
+\begin{center}
+\begin{tabular}
+{| T | l | c | T | T | T | T } \hline
+\rm Inst            & Name               & FMT & \rm Opcode & \rm Description (C)           \\ \hline
+NOOP                & No operation       & J   & 0000       & No operation                  \\
+JR src              & Jump register      & R   & 0001       & Jump to src                   \\
+BE src1, src2, src3 & Branch if Equal    & R   & 0011       & If src1 == src2, jump to src3 \\
+SW src1, src2       & Store word         & R   & 0101       & src1 => mem[src2]             \\
+% MFLO dest           & Move from Lo       & I   & 0110       & lo => dest                    \\
+LW src1, src2       & Load word          & R   & 0111       & mem[src2] => src1             \\
+LI dest, imm        & Load immediate     & I   & 1000       & dest = imm                    \\
+ADD dest, src1, src2& Add                & R   & 1001       & dest = src1 + src2            \\
+XOR dest, src1, src2& Exclusive-OR       & R   & 1010       & dest = src1 \^{} src2         \\
+AND dest, src1, src2& AND                & R   & 1011       & dest = src1 \& src2           \\
+OR dest, src1, src2 & OR                 & R   & 1100       & dest = src1 | src2            \\
+% MULT src1, src2     & Multiply           & R   & 1101       & \{hi, lo\} = src1 * src2      \\
+SLL dest, src1, src2& Shift Logical Left & R   & 1110       & dest = src1 << src2           \\
+SLR dest, src1, src2& Shift Logical Right& R   & 1111       & dest = src1 >> src2           \\
+ \hline
+
+\end{tabular}
+\end{center}
+
+
+

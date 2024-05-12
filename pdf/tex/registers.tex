@@ -1,0 +1,95 @@
+\section*{Registers}
+\begin{center}
+\begin{tabular} {l | l | l | l} \hline
+Register       & ABI Name       & Description              & Saver  \\ \hline
+\tt{x0}        & \tt{zero}      & Zero constant            & ---    \\
+\tt{x2}        & \tt{sp}        & Return address           & Caller \\
+\tt{x3}        & \tt{im}        & Stack pointer            & Callee \\
+\tt{x4}        & \tt{ra}        & Immediate register       & ---    \\
+\tt{x1, x5-x8} & \tt{s,a,b,x,y} & Saved register           & Callee \\
+\tt{x9-xd}     & \tt{t0-t5}     & Temporaries              & Caller \\
+\tt{xe-xf}     & \tt{hi, lo}    & Multiplication registers & --- \\
+\hline
+
+\end{tabular}
+\end{center}
+
+\subsection*{Data Alignment \& Memory Layout (Byte-Addressed)}
+
+    \begin{adjustwidth}{-.4cm}{}
+    \begin{minipage}{.50\linewidth}
+    \small
+    \begin{tabular}
+    {p{0in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}l}
+
+    &
+    \instbit{15} &
+    \instbit{14} &
+    \instbit{13} &
+    \multicolumn{1}{c}{\instbit{12}} &
+    \instbit{11} &
+    \instbit{10} &
+    \instbit{9} &
+    \instbit{8} &
+    \instbit{7} &
+    \instbit{6} &
+    \instbit{5} &
+    \instbit{4} &
+    \instbit{3} &
+    \instbit{2} &
+    \instbit{1} &
+    \instbit{0} \\
+    \cline{2-17}
+
+    &
+    \multicolumn{16}{|c|}{Word} & \\
+    \cline{2-17}
+
+    &
+    \multicolumn{8}{|c|}{Bye} &
+    \multicolumn{8}{c|}{Byte} &
+    \\
+    \cline{2-17}
+
+    \end{tabular}
+    \quad
+    \end{minipage}%
+    \begin{minipage}{.50\linewidth}
+    \small
+    \begin{tabular}
+    {p{0in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}p{0.05in}l}
+
+    &
+    \instbit{0x0} &
+    \instbit{} &
+    \instbit{} &
+    \multicolumn{1}{c}{} &
+    \instbit{} &
+    \instbit{0x007F} &
+    \instbit{} &
+    \instbit{} &
+    \instbit{} &
+    \instbit{} &
+    \instbit{} &
+    \instbit{} &
+    \instbit{} &
+    \instbit{} &
+    \instbit{0xFFFF} &
+    \instbit{} \\
+    \cline{2-17}
+
+    &
+    \multicolumn{6}{|c|}{Static Memory} & 
+    \multicolumn{10}{c|}{Stack}\\
+
+    &
+    \multicolumn{6}{|c|}{FIXED} &
+    \multicolumn{10}{l|}{$\longrightarrow$} &
+    \\
+    \cline{2-17}
+
+    \end{tabular}
+    \quad
+
+    \end{minipage} 
+    \end{adjustwidth}
