@@ -17,7 +17,8 @@
 2. Our Assembler
     - As stated, we provide an assembler under `assembler/`. The Green Sheet  
     provides info on valid instructions which it can recognized, along with their  
-    canonical instruction names.  
+    canonical instruction names. This is BETA, and only supports a handful of our  
+    instructions.  
 3. A demo!
-    - A demo video can be found [here!](https://www.youtube.com)
+    - A demo video can be found [here!](https://youtu.be/mvnDQ-c6qT8)
     - Other goodies (like our fib waveforms) can be seen under `goodies/`
