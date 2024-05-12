@@ -18,7 +18,7 @@
 `include "../clock/clock.sv"
 
 module tb_dmem;
-    parameter n = 32; // bit length of registers/memory
+    parameter n = 16; // bit length of registers/memory
     parameter r = 6; // we are only addressing 64=2**6 mem slots in imem
     logic [(n-1):0] readdata, writedata;
     logic [(n-1):0] dmem_addr;

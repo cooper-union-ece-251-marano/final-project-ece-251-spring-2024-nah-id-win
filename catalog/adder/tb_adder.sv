@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: YOUR NAMES
+// Engineer: Evan Rosenfeld, James Ryan
 // 
 //     Create Date: 2023-02-07
 //     Module Name: tb_adder
@@ -17,7 +17,7 @@
 `include "adder.sv"
 
 module tb_adder;
-    parameter n = 32;
+    parameter n = 16;
     logic [(n-1):0] a, b, y;
 
    initial begin

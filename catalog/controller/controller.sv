@@ -19,30 +19,31 @@
 `include "../aludec/aludec.sv"
 
 module controller
-    #(parameter n = 32)(
+    #(parameter n = 16)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
-    input  logic [5:0] op, funct,
-    input  logic       zero,
-    output logic       memtoreg, memwrite,
-    output logic       pcsrc, alusrc,
+    input  logic [3:0] op,
+	
+	output logic       mem2reg, memwrite, memread,
+    output logic       alusrc,
     output logic       regdst, regwrite,
-    output logic       jump,
-    output logic [2:0] alucontrol
+    output logic       branch,
+	output logic       jump
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [1:0] aluop;
-    logic       branch;
-    
-    // CPU main decoder
-    maindec md(op, memtoreg, memwrite, branch, alusrc, regdst, regwrite, jump, aluop);
-    // CPU's ALU decoder
-    aludec  ad(funct, aluop, alucontrol);
+   	//logic [3:0] aluop;
 
-  assign pcsrc = branch & zero;
+    // CPU main decoder
+    maindec md(.op(op), .mem2reg(mem2reg), .memwrite(memwrite), .memread(memread), 
+	           .alusrc(alusrc), .regdst(regdst), .regwrite(regwrite), 
+			   .branch(branch), .jumpr(jump));
+    // CPU's ALU decoder
+	// not needed in our design -- our 4 MSBs in our opcode covers this
+	//	so we dont have an ALU decoder
+    // aludec  ad(funct, aluop, alucontrol);
 
 endmodule
 

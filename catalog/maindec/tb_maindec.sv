@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: YOUR NAMES
+// Engineer: Evan Rosenfeld, James Ryan
 // 
 //     Create Date: 2023-02-07
 //     Module Name: tb_maindec
@@ -17,7 +17,7 @@
 `include "maindec.sv"
 
 module tb_maindec;
-    parameter n = 32;
+    parameter n = 16;
 
 endmodule
 `endif // TB_MAINDEC

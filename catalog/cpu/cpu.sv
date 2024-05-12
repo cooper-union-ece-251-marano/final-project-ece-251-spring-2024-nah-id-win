@@ -2,6 +2,7 @@
 // The Cooper Union
 // ECE 251 Spring 2024
 // Engineer: Prof Rob Marano
+// Engineer: Evan Rosenfeld, James Ryan
 // 
 //     Create Date: 2023-02-07
 //     Module Name: cpu
@@ -19,35 +20,40 @@
 `include "../datapath/datapath.sv"
 
 module cpu
-    #(parameter n = 32)(
+    #(parameter n = `WORDSIZE)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic           clk, reset,
-    output logic [(n-1):0] pc,
     input  logic [(n-1):0] instr,
+    input  logic [(n-1):0] readdata,
+	
+	output logic [(n-1):0] dataadr,
+	output logic [(n-1):0] pc,
     output logic           memwrite,
-    output logic [(n-1):0] aluout, writedata,
-    input  logic [(n-1):0] readdata
+    output logic [(n-1):0] aluout, writedata
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
 
     // cpu internal components
-    logic       memtoreg, alusrc, regdst, regwrite, jump, pcsrc, zero;
-    logic [2:0] alucontrol;
-    
-    controller c(instr[(31):26], instr[5:0], zero,
-                    memtoreg, memwrite, pcsrc,
-                    alusrc, regdst, regwrite, jump,
-                    alucontrol);
+    logic       memtoreg, alusrc, regdst, regwrite, branch, zero, pcsrc, jump;
+	//logic [n-1:0] overflow;
 
-    datapath dp(clk, reset, memtoreg, pcsrc,
-                    alusrc, regdst, regwrite, jump,
-                    alucontrol,
-                    zero, pc, instr,
-                    aluout, writedata, readdata);
+	//ctrl in: instr, zero
+	//out: regdst, branch, memread, mem2reg, memwrite, alusrc, regwrite, pcsrc 
+    controller c(instr[15:12],
+                    memtoreg, memwrite, memread,
+                    alusrc, regdst, regwrite, 
+                    branch, jump);
+
+	//dp in: clk, reset, inst, ALL ctrl signals
+	//dp out: 
+    datapath dp(clk, reset, memtoreg,
+                    alusrc, regdst, regwrite, branch,
+                    instr, readdata, zero, pc,
+                    aluout, writedata, jump);
 
 endmodule
 

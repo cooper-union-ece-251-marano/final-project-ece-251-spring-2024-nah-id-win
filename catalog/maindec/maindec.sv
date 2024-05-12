@@ -16,35 +16,44 @@
 `timescale 1ns/100ps
 
 module maindec
-    #(parameter n = 32)(
+    #(parameter n = 16)(
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
-    input  logic [5:0] op,
-    output logic       memtoreg, memwrite,
-    output logic       branch, alusrc,
+    input  logic [3:0] op,
+    
+	output logic       mem2reg, memwrite, memread,
+    output logic       alusrc,
     output logic       regdst, regwrite,
-    output logic       jump,
-    output logic [1:0] aluop
+    output logic       branch,
+    output logic       jumpr
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [8:0] controls; // 9-bit control vector
+    logic [7:0] controls; // 7-bit control vector
 
-    // controls has 9 logical signals
-    assign {regwrite, regdst, alusrc, branch, memwrite,
-            memtoreg, jump, aluop} = controls;
+    // controls has 8 logical signals
+    assign {regwrite, regdst, alusrc, memwrite, memread,
+            mem2reg, branch, jumpr} = controls;
 
     always @* begin
-        case(op)
-            6'b000000: controls <= 9'b110000010; // RTYPE
-            6'b100011: controls <= 9'b101001000; // LW
-            6'b101011: controls <= 9'b001010000; // SW
-            6'b000100: controls <= 9'b000100001; // BEQ
-            6'b001000: controls <= 9'b101000000; // ADDI
-            6'b000010: controls <= 9'b000000100; // J
-            default:   controls <= 9'bxxxxxxxxx; // illegal operation
+        case(op[3:0])
+            4'b0000: controls <= 8'b00000000; // NOOP
+            4'b0001: controls <= 8'b01000001; // JR
+            4'b0011: controls <= 8'b10000010; // BE
+            4'b1000: controls <= 8'b10100000; // LI
+            4'b0110: controls <= 8'b00000000; // MFLO
+			4'b0111: controls <= 8'b10101100; // LW
+            4'b0101: controls <= 8'b0x110x00; // SW
+            4'b1001: controls <= 8'b11000000; // ADD
+            4'b1010: controls <= 8'b11000000; // XOR
+            4'b1011: controls <= 8'b11000000; // AND
+            4'b1100: controls <= 8'b11000000; // OR
+            4'b1101: controls <= 8'b00000000; // MULT
+            4'b1110: controls <= 8'b11000000; // SLL
+            4'b1111: controls <= 8'b11000000; // SLR
+            default: controls <= 8'bxxxxxxxx; // inavlid instruction
         endcase
     end
 
