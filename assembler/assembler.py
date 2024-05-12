@@ -52,14 +52,17 @@ blanks: dict[str, int] = {
 }
 
 registers: dict[str, int] = {
-    '$pc' : 0,
-    '$sp' : 1,
-    '$ra' : 2,
-    '$im' : 3,
-    '$a' : 4,
-    '$x' : 5,
-    '$hi' : 6,
-    '$lo' : 7,
+    '$zero' : 0,
+    '$sp' : 2,
+    '$s' : 1,
+    '$ra' : 3,
+    '$im' : 4,
+    '$a' : 5,
+    '$b' : 6,
+    '$x' : 7,
+    '$y' : 8,
+    '$hi' : 14,
+    '$lo' : 15,
 }
 
 import sys
@@ -67,12 +70,13 @@ import sys
 def parseLine(line: str, labels: dict[str, int], insCount: int) -> list[str]:
     values: list[str] = line.strip().split(' ')
     info: list[int, str] = instructions[values[0]]
-    op: str = bin(info[0])[2:].rjust(5, '0')[:5] + ('0' * blanks[info[1]])
+    op: str = bin(info[0])[2:].rjust(4, '0')[:4]
     if info[1] == 'R':
         for reg in values[1:]:
-            op += bin(registers[reg.rstrip(',')])[2:].rjust(3, '0')
+            op += bin(registers[reg.rstrip(',')])[2:].rjust(4, '0')
     elif info[1] == 'I':
-        halfImm: str = values[1]
+        op += bin(registers[values[1].rstrip(',')])[2:].rjust(4, '0')
+        halfImm: str = values[2]
         if len(halfImm) >= 3:
             if halfImm[0:2] == '0b':
                 num = halfImm[2:].rjust(8, '0')
